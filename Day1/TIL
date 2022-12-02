@@ -1,0 +1,19 @@
+The difference between `pip install` and `pip3 install` 
+(you need to use `pip3 install` if you run using `python3`!)
+
+How to split lists into more lists using .split() and for loops
+
+How to find an index of the value 'x' in a list using list.index('x')
+It only gives you the index of the first instance of 'x'!
+You can use numpy (a package) shenanigans to interpret arrays and get around this
+And you really need to keep in mind that indices start at 0
+
+That print() is the best function ever for diagnostics
+
+How to combine variables and strings in a print() function line
+
+That type(x) will tell you what type the object 'x' is
+
+That you really need : at the end of for statements
+
+That CMD + / will quick-comment
