@@ -5,8 +5,6 @@
 import numpy as np 
 
 # PART I
-# Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
-
 data_txt = open('puzzle_input.txt').read() #read the txt file as a string
 cal_list = data_txt.split('\n\n') #break the string up into a list of each Elf's calories
 
@@ -32,6 +30,7 @@ else:
     print('Those Elves are carrying',max(total_cals),'calories')
 
 # PART II
+# Find the top three Elves carrying the most Calories. How many Calories are those Elves carrying in total?
 total_cals.sort(reverse=True)
 top_three = []
 for i in range(0,3):
