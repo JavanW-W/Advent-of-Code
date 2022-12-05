@@ -1,0 +1,6 @@
+Python operators! https://www.w3schools.com/python/python_operators.asp
+
+If you want to make a multi-line conditional, you can encapsulate the long statement using parentheses
+If you don't want to use parentheses, you can add a backslash (\) to the end of the lines with breaks
+
+You can use [x::y] in indexing to pick every yth element starting at index x
