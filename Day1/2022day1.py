@@ -5,7 +5,8 @@
 import numpy as np 
 
 # PART I
-data_txt = open('puzzle_input.txt').read() #read the txt file as a string
+with open('puzzle_input.txt') as f:
+    data_txt = f.read() #read the txt file as a string
 cal_list = data_txt.split('\n\n') #break the string up into a list of each Elf's calories
 
 total_cals = [] #initialize the list of total calories for each Elf

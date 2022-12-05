@@ -10,7 +10,8 @@
 # Draw = 3pt
 # Win = 6pt
 
-data_txt = open('puzzle_input.txt').read() #read the txt file as a string
+with open('puzzle_input.txt') as f:
+    data_txt = f.read() #read the txt file as a string
 opponent_pick = data_txt[0::4]
 my_pick = data_txt[2::4]
 
