@@ -1,0 +1,11 @@
+How to create nesting lists by using single-line for/.split() combo with brackets
+https://bobbyhadz.com/blog/python-split-elements-in-list
+
+dunder = double underscore
+
+Sets are super clever - they are unordered, unchangeable*, can hold different data types (including tuples, but not dicts or lists), and can use a number of functions to do venn diagram-like operations
+Sets use curly brackets
+https://realpython.com/python-sets/
+(*the elements are unchangeable, but elements can be added or removed)
+
+output of range() does not include the 'stop' value (i.e. range(1, 4) would be 1, 2, 3)
