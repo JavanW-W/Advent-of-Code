@@ -1,0 +1,14 @@
+Using the function open() doesn't close a file after use - and it is good practice to do so!
+While you can use close(), it is somewhat cleaner to use a "with open()" statement 
+
+# is for comments
+""" is for docstrings (but can also be for long string comments)
+docstrings are used when defining functions, etc.
+They are different!
+https://www.pythonforbeginners.com/comments/when-to-use-comments-vs-docstrings-in-python
+
+Unicode can be used to convert characters to integers using the ord() function
+You can do the reverse (convert ints to strs) using the chr() function 
+
+Regular expressions can be used to define search patterns!
+https://www.w3schools.com/python/python_regex.asp
