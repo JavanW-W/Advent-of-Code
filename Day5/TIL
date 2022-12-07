@@ -1,0 +1,8 @@
+How to write a function!
+
+How to find the index of a RegEx match using re.finditer
+
+.strip() gets rid of whitespaces, including newlines
+
+Indexing/position reference is a bitch
+You've really got to check it for every single thing (range(),pop(),list[index],etc.)
