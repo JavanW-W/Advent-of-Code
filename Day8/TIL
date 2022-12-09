@@ -1,0 +1,14 @@
+.readlines() will return each line of the file as a list item, but those items will include the newline charater (\n)
+.read().splitlines() will return each line as a list item without the newline character at the end
+
+break can get you out of a for/while loop when an if condition is met
+be careful with breaks in a nested for/while loop!
+if you want to iterate while (condition using x) is True for x in a range:
+- the for loop is the outer loop
+- the while loop must end with a break
+- if you want to STOP going through the while loop once you've reached the first time (condition using x) is False
+you need to add an if (condition using x) is False followed by a break in the for loop (same level as the while loop)
+(maybe there's a cleaner way to do this, I don't know)
+- if you put a break at the end of the for loop without a condition, the while loop will only evaluate max one time!
+
+if all(expression using x for x in whatever)
