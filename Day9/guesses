@@ -1,0 +1,4 @@
+3497 - too low
+3498
+6314 - correct
+I was not accounting for >1 digit distances in my parsing!
