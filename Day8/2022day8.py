@@ -55,48 +55,40 @@ for row in range(1,rows-1):
             if all(trees_txt[row][column] > trees_txt[row][l] for l in range(0,column)):
                 visible[row][column] = True
             v_d = 1
-            for l in range(column-1,-1,-1):
-                while (trees_txt[row][column] > trees_txt[row][l]) and (isOnEdge(row, l) == False):
-                    v_d += 1
-                    break
-                if trees_txt[row][column] <= trees_txt[row][l]:
-                    break            
+            l = column - 1
+            while (trees_txt[row][column] > trees_txt[row][l]) and (isOnEdge(row, l) == False) and (l > -1):
+                v_d += 1
+                l -= 1
             scenic_score[row][column] += v_d
         #check to the right   
             # print('check to the right')
             if all(trees_txt[row][column] > trees_txt[row][r] for r in range(column+1,columns)):
                 visible[row][column] = True
             v_d = 1
-            for r in range(column+1,columns):
-                while (trees_txt[row][column] > trees_txt[row][r]) and (isOnEdge(row, r) == False):
-                    v_d += 1
-                    break
-                if trees_txt[row][column] <= trees_txt[row][r]:
-                    break
+            r = column + 1
+            while (trees_txt[row][column] > trees_txt[row][r]) and (isOnEdge(row, r) == False) and (r < columns):
+                v_d += 1
+                r += 1
             scenic_score[row][column] *= v_d
         #check to the top   
             # print('check to the top')
             if all(trees_txt[row][column] > trees_txt[t][column] for t in range(0,row)):
                 visible[row][column] = True
             v_d = 1
-            for t in range(row-1,-1,-1):
-                while (trees_txt[row][column] > trees_txt[t][column]) and (isOnEdge(t, column) == False):
-                    v_d += 1
-                    break
-                if trees_txt[row][column] <= trees_txt[t][column]:
-                    break
+            t = row - 1
+            while (trees_txt[row][column] > trees_txt[t][column]) and (isOnEdge(t, column) == False) and (t > -1):
+                v_d += 1
+                t -= 1
             scenic_score[row][column] *= v_d
         #check to the bottom   
             # print('check to the bottom')
             if all(trees_txt[row][column] > trees_txt[b][column] for b in range(row+1,rows)):
                 visible[row][column] = True
             v_d = 1
-            for b in range(row+1,rows):
-                while (trees_txt[row][column] > trees_txt[b][column]) and (isOnEdge(b, column) == False):
-                    v_d += 1
-                    break
-                if trees_txt[row][column] <= trees_txt[b][column]:
-                    break
+            b = row + 1
+            while (trees_txt[row][column] > trees_txt[b][column]) and (isOnEdge(b, column) == False) and (b < rows):
+                v_d += 1
+                b += 1
             scenic_score[row][column] *= v_d
 
 max_scenic_score = max([x for sublist in scenic_score for x in sublist])
