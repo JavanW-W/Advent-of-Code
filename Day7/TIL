@@ -1,0 +1,7 @@
+How to use the os module to create directories and "pipes" (kind of like named files without having anything in them)
+
+use enumerate() to get index and element in an iterable in a for loop:
+i.e. "for index, element in enumerate(list)"
+
+if you do new_list = old_list, you tie them together such that changes to new_list also change old_list
+use a shallow copy! new_list = old_list.copy() so that you can reference the original values in old_list
