@@ -32,7 +32,8 @@ class TestCalculations(unittest.TestCase):
         """Day 1 Part 2 Test Case."""
         data = self.testData["day-1"]
         # test convert_text_to_digit
-        total_cal = sum(calculations.find_calibrations_with_strings(data["part2_input"]))
+        total_cal = \
+            sum(calculations.find_calibrations_with_strings(data["part2_input"]))
         self.assertEqual(total_cal, data["part2_solution"])
 
 if __name__ == '__main__':
