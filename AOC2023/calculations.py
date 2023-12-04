@@ -140,7 +140,6 @@ def check_adjacency(truthy_grid: list[list[bool]], coords: list[dict]) -> list[b
         # check horizontal adjacency - remember truthy grid has padding row/column
         horizontal = truthy_grid[row][start - 1] or truthy_grid[row][end + 1]
         # check vertical adjacency
-        # NOTE: I don't actually know why I need to add by 2 here, this worked on accident??
         vertical = any(truthy_grid[row - 1][start - 1:end + 2]) or any(truthy_grid[row + 1][start - 1:end + 2])
         adjacency.append(bool(horizontal or vertical))
 
@@ -152,7 +151,7 @@ def find_part_numbers(grid: list[str]) -> list[int]:
     """
     number_info, part_numbers = [], []
     # the truthy grid should have a padding row/column to surround edges
-    truthy_grid = [[False for char in grid[0]]]
+    truthy_grid = [[False for char in grid[0]] + [False]] 
     for row in grid:
         new_row = [False]
         for char in row:
