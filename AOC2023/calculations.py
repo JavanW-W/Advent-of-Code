@@ -122,3 +122,69 @@ day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
 day2_part2 = sum(find_minimum_cubes_power(file_data))
 print(f"Day 2 - Part 1: {day2_part1}")
 print(f"Day 2 - Part 2: {day2_part2}")
+
+#
+# DAY 3 FUNCTIONS
+#
+
+def find_part_numbers(grid: list[str]) -> list[int]:
+    """Parse a grid to determine "part numbers"
+    i.e., Numbers that are non-adjacent (up/down/left/right/diagonal) to a symbol.
+    """
+
+    open_coords = []
+    for row in grid:
+        open_spaces = re.finditer('\.+',row)
+        numbers = re.finditer('\d+',row)
+        for number in numbers:
+            print(number.span())
+
+with open('inputs/day3.txt', newline='') as file:
+    file_data = file.read()
+    line_data = file_data.split('\n')
+
+# day3_part1 = sum(find_part_numbers(file_data))
+# print(f"Day 3 - Part 1: {day3_part1}")
+
+#
+# DAY 4 FUNCTIONS
+#
+
+def find_winners(card_info: str) -> int:
+    """Parse a string of card info to determine number of winning numbers."""
+    winning_numbers = [int(num) for num in card_info.split(":")[1].split("|")[0].split(" ") if num != '']
+    my_numbers = [int(num) for num in card_info.split(":")[1].split("|")[1].split(" ") if num != '']
+    winners = 0
+    for number in my_numbers:
+        if number in winning_numbers:
+            winners += 1
+    
+    return winners
+    
+def find_card_scores(card_data: list[str]) -> list[int]:
+    """Parse a TXT file of card info to determine the scores of cards."""
+    card_scores = []
+    for card in card_data:
+        card_scores.append(2**(find_winners(card) - 1) if find_winners(card) > 0 else 0)
+
+    return card_scores
+
+def find_total_copies(card_data: list[str]) -> list[int]:
+    """Parse a TXT file of card info to determine the total copies of each card."""
+    total_copies = [1 for card in card_data]
+    for i, copies in enumerate(total_copies):
+        winners = find_winners(card_data[i])
+        for j in range(1, winners + 1):
+            total_copies[i + j] += copies
+
+    return total_copies
+
+with open('inputs/day4.txt', newline='') as file:
+    file_data = file.read()
+    card_data = file_data.split('\n')
+
+day4_part1 = sum(find_card_scores(card_data))
+day4_part2 = sum(find_total_copies(card_data))
+print(f"Day 4 - Part 1: {day4_part1}")
+print(f"Day 4 - Part 2: {day4_part2}")
+
