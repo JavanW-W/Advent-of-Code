@@ -127,24 +127,110 @@ print(f"Day 2 - Part 2: {day2_part2}")
 # DAY 3 FUNCTIONS
 #
 
+def check_adjacency(truthy_grid: list[list[bool]], coords: list[dict]) -> list[bool]:
+    """Check coordinates against a grid of truthiness to determine whether a group of characters
+    is adjacent to a truthy value.
+    """
+    adjacency = []
+    for coord in coords:
+        # remember truthy grid has padding
+        row = coord["row"] + 1
+        start = coord["start"] + 1
+        end = coord["end"] + 1
+        # check horizontal adjacency - remember truthy grid has padding row/column
+        horizontal = truthy_grid[row][start - 1] or truthy_grid[row][end + 1]
+        # check vertical adjacency
+        # NOTE: I don't actually know why I need to add by 2 here, this worked on accident??
+        vertical = any(truthy_grid[row - 1][start - 1:end + 2]) or any(truthy_grid[row + 1][start - 1:end + 2])
+        adjacency.append(bool(horizontal or vertical))
+
+    return adjacency
+
 def find_part_numbers(grid: list[str]) -> list[int]:
     """Parse a grid to determine "part numbers"
     i.e., Numbers that are non-adjacent (up/down/left/right/diagonal) to a symbol.
     """
-
-    open_coords = []
+    number_info, part_numbers = [], []
+    # the truthy grid should have a padding row/column to surround edges
+    truthy_grid = [[False for char in grid[0]]]
     for row in grid:
-        open_spaces = re.finditer('\.+',row)
+        new_row = [False]
+        for char in row:
+            if char == '.' or char.isdigit():
+                new_row.append(False)
+            else:
+                new_row.append(True)
+        new_row.append(False)
+        truthy_grid.append(new_row)
+    truthy_grid.append([False for char in grid[0]])
+    # find the numbers
+    for i, row in enumerate(grid):
         numbers = re.finditer('\d+',row)
         for number in numbers:
-            print(number.span())
+            # get coordinates
+            number_info.append({
+                "number": int(number.group()),
+                "row": i, 
+                "start": number.start(), 
+                "end": number.end() - 1
+                })
+    adjacency = check_adjacency(truthy_grid, number_info)
+    for i, number in enumerate(number_info):
+        if adjacency[i]:
+            part_numbers.append(number["number"])
+
+    return part_numbers
+
+def find_adjacent_parts(asterisk_info: list[dict], number_info: list[dict]) -> list[list[int]]:
+    """Match asterisks to part numbers adjacent to them."""
+    adjacent_parts = [[] for asterisk in asterisk_info]
+    for i, asterisk in enumerate(asterisk_info):
+        for number in number_info:
+            # check for horizontal adjacency
+            if asterisk["row"] - 1 <= number["row"] <= asterisk["row"] + 1:
+                if number["start"] - 1 <= asterisk["col"] <= number["end"] + 1:
+                    adjacent_parts[i].append(number["number"])
+
+    return adjacent_parts
+
+def find_gear_ratios(grid: list[str]) -> list[int]:
+    """Parse a grid to determine gears
+    i.e., asterisks that are adjacent to exactly two part numbers.
+    """
+    asterisk_info, number_info, gear_ratios = [], [], []
+    # find all of the asterisks and numbers
+    for i, row in enumerate(grid):
+        asterisks = re.finditer('\\*', row)
+        numbers = re.finditer('\d+', row)
+        for asterisk in asterisks:
+            # get coordinates
+            asterisk_info.append({
+                "row": i,
+                "col": asterisk.start()
+            })
+        for number in numbers:
+            # get coordinates
+            number_info.append({
+                "number": int(number.group()),
+                "row": i, 
+                "start": number.start(), 
+                "end": number.end() - 1
+                })
+    adjacent_parts = find_adjacent_parts(asterisk_info, number_info)
+    for i, parts in enumerate(adjacent_parts):
+        if len(adjacent_parts[i]) == 2:
+            gear_ratios.append(parts[0] * parts[1])
+        
+    return gear_ratios
 
 with open('inputs/day3.txt', newline='') as file:
     file_data = file.read()
     line_data = file_data.split('\n')
 
-# day3_part1 = sum(find_part_numbers(file_data))
-# print(f"Day 3 - Part 1: {day3_part1}")
+day3_part1 = sum(find_part_numbers(line_data))
+day3_part2 = sum(find_gear_ratios(line_data))
+print(f"Day 3 - Part 1: {day3_part1}")
+print(f"Day 3 - Part 2: {day3_part2}")
 
 #
 # DAY 4 FUNCTIONS

@@ -50,12 +50,19 @@ class TestCalculations(unittest.TestCase):
         power_sum = sum(calculations.find_minimum_cubes_power(data["test_input"]))
         self.assertEqual(power_sum, data["part2_solution"])
 
-    # def test_day3_part1(self):
-    #     """Day 3 Part 1 Test Case."""
-    #     data = self.testData["day-3"]
-    #     # test find_part_numbers
-    #     part_number_sum = sum(calculations.find_part_numbers(data["part1_input"]))
-    #     self.assertEqual(part_number_sum, data["part1_solution"])
+    def test_day3_part1(self):
+        """Day 3 Part 1 Test Case."""
+        data = self.testData["day-3"]
+        # test find_part_numbers
+        part_number_sum = sum(calculations.find_part_numbers(data["test_input"]))
+        self.assertEqual(part_number_sum, data["part1_solution"])
+
+    def test_day3_part2(self):
+        """Day 3 Part 2 Test Case."""
+        data = self.testData["day-3"]
+        # test find_part_numbers
+        part_number_sum = sum(calculations.find_gear_ratios(data["test_input"]))
+        self.assertEqual(part_number_sum, data["part2_solution"])
 
     def test_day4_part1(self):
         """Day 4 Part 1 Test Case."""
