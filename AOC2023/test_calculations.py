@@ -36,6 +36,20 @@ class TestCalculations(unittest.TestCase):
             sum(calculations.find_calibrations_with_strings(data["part2_input"]))
         self.assertEqual(total_cal, data["part2_solution"])
 
+    def test_day2_part1(self):
+        """Day 2 Part 1 Test Case."""
+        data = self.testData["day-2"]
+        # test
+        game_sum = sum(calculations.find_possible_games(data["part1_input"], 12, 13, 14))
+        self.assertEqual(game_sum, data["part1_solution"])
+
+    def test_day2_part2(self):
+        """Day 2 Part 2 Test Case."""
+        data = self.testData["day-2"]
+        # test
+        game_sum = sum(calculations.find_minimum_cubes_power(data["part2_input"]))
+        self.assertEqual(game_sum, data["part2_solution"])
+
 if __name__ == '__main__':
     unittest.main()
 

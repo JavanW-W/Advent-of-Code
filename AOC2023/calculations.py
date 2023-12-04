@@ -1,5 +1,7 @@
 from config import DIGIT_STRINGS
 
+import re
+
 #
 ## DAY 1 FUNCTIONS
 #
@@ -59,3 +61,64 @@ day1_part2 = sum(find_calibrations_with_strings(file_data))
 print(f"Day 1 - Part 1: {day1_part1}")
 print(f"Day 1 - Part 2: {day1_part2}")
 
+#
+## DAY 2 FUNCTIONS
+#
+
+# Determine which games would have been possible if the bag had been loaded with only 
+# 12 red cubes, 13 green cubes, and 14 blue cubes. What is the sum of the IDs of those games?
+# pattern is [str int: int str, int str; int str, int str, int str]
+
+def find_max_colors(game_data) -> dict[str, int]:
+    """Parses a TXT document of game data to return a dictionary of colors and their maximum number."""
+    max_colors = {"red": [], "blue": [], "green": []}
+    # separate rounds
+    rounds = game_data.split(":")[1].split(";")
+    for round in rounds:
+        pairs = round.split(",")
+        for pair in pairs:
+            #separate colors
+            color = pair.split(" ")[-1].strip()
+            max_colors[color].append(int(pair.split(" ")[1]))
+        # determine whether the game was possible
+    return {
+        "red": max(max_colors["red"]), 
+        "blue": max(max_colors["blue"]), 
+        "green": max(max_colors["green"])
+    }
+
+
+def find_possible_games(file_data: list[str], red_limit: int, green_limit: int, blue_limit: int) -> list[int]:
+    """Parses a TXT document to return a list of possible games given a number of red, green, and blue cubes."""
+    possible_games = []
+    for game in file_data:
+        # separate game number
+        game_num = int(game.split(":")[0].split(" ")[1])
+        # separate rounds
+        max_colors = find_max_colors(game)
+        # determine whether the game was possible
+        if max_colors["red"] <= red_limit and max_colors["blue"] <= blue_limit and max_colors["green"] <= green_limit:
+            possible_games.append(game_num)
+
+    return possible_games
+
+def find_minimum_cubes_power(file_data: list[str]) -> list[int]:
+    """Parse a TXT document to determine minimum number of cubes to make a game possible."""
+    minimum_cubes_power = []
+    for game in file_data:
+        # separate rounds
+        max_colors = find_max_colors(game)
+        # determine whether the game was possible
+        minimum_cubes_power.append(max_colors["red"] * max_colors["blue"] * max_colors["green"])
+    
+    return minimum_cubes_power
+
+# SOLUTIONS
+
+with open('inputs/day2.txt', newline='') as file:
+    file_data = file.readlines()
+
+day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
+day2_part2 = sum(find_minimum_cubes_power(file_data))
+print(f"Day 2 - Part 1: {day2_part1}")
+print(f"Day 2 - Part 2: {day2_part2}")

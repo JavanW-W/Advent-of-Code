@@ -1,4 +1,4 @@
-import os, re, time
+import os, re
 
 async def make_tree(tree_txt):
     """ Turns a CLI read-out into an actual directory within the current working directory """
