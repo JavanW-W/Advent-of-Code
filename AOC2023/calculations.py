@@ -273,3 +273,46 @@ day4_part2 = sum(find_total_copies(card_data))
 print(f"Day 4 - Part 1: {day4_part1}")
 print(f"Day 4 - Part 2: {day4_part2}")
 
+#
+# DAY 5 FUNCTIONS
+#
+
+def map_x_to_y(map_info: list[list[str]], initial_list: list[int]) -> list[int]:
+    new_list = initial_list
+    for i, x in enumerate(initial_list):
+        for mapping in map_info:
+            dest_start = int(mapping[0])
+            source_start = int(mapping[1])
+            map_range = int(mapping[2])
+            diff = x - source_start
+            if 0 <= diff <= map_range:
+                new_list[i] = dest_start + diff
+            else:
+                continue
+    return new_list
+
+def find_locations(almanac_path: str):
+    """"""
+    with open(almanac_path, newline='') as file:
+        file_data = file.read()
+        almanac_sections = file_data.split('\n\n')
+
+    almanac = {}
+    seeds_row = almanac_sections[0]
+    almanac["seeds"] = [int(seeds) for seeds in seeds_row.split(": ")[1].split(" ")]
+    for section in almanac_sections[1:]:
+        sub_sections = section.split("\n")
+        almanac[sub_sections[0].replace(":", "")] = [list.split(" ") for list in sub_sections[1:]]
+    
+    soils = map_x_to_y(almanac["seed-to-soil map"], almanac["seeds"])
+    fertilizers = map_x_to_y(almanac["soil-to-fertilizer map"], soils)
+    waters = map_x_to_y(almanac["fertilizer-to-water map"], fertilizers)
+    lights = map_x_to_y(almanac["water-to-light map"], waters)
+    temps = map_x_to_y(almanac["light-to-temperature map"], lights)
+    humidities = map_x_to_y(almanac["temperature-to-humidity map"], temps)
+    locations = map_x_to_y(almanac["humidity-to-location map"], humidities) 
+
+    return locations
+
+day5_part1 = min(find_locations('inputs/day5.txt'))
+print(f"Day 5 - Part 1: {day5_part1}")
