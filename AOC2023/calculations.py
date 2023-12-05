@@ -283,16 +283,17 @@ def map_x_to_y(map_info: list[list[str]], initial_list: list[int]) -> list[int]:
         for mapping in map_info:
             dest_start = int(mapping[0])
             source_start = int(mapping[1])
-            map_range = int(mapping[2])
+            range_length = int(mapping[2])
             diff = x - source_start
-            if 0 <= diff <= map_range:
+            if 0 <= diff <= range_length - 1:
                 new_list[i] = dest_start + diff
+                break
             else:
                 continue
     return new_list
 
 def find_locations(almanac_path: str):
-    """"""
+    """Parses TXT file and returns locations for planting individual seeds."""
     with open(almanac_path, newline='') as file:
         file_data = file.read()
         almanac_sections = file_data.split('\n\n')
@@ -314,5 +315,134 @@ def find_locations(almanac_path: str):
 
     return locations
 
+def map_ranges(map_info: list[list[str]], input_range_info: list[dict]):
+    """Maps a range (start, end) to another range (start, end) or ranges"""
+    output_range = []
+    for input_range in input_range_info:
+        for mapping in map_info:
+            last_mapping = mapping == map_info[-1]
+            range_length = int(mapping[2])
+            source_start = int(mapping[1])
+            source_end = source_start + range_length - 1
+            dest_start = int(mapping[0])
+            dest_end = dest_start + range_length - 1
+            # there are 5 cases:
+            # 1. initial range is completely within mapping range
+            if source_start <= input_range["start"] and input_range["end"] <= source_end:
+                output_range.append({
+                    "start": dest_start + (input_range["start"] - source_start),
+                    "end": dest_end + (input_range["end"] - source_end),
+                })
+                break
+            # 2. initial range is completely outside of mapping range
+            elif input_range["end"] <= source_start or source_end <= input_range["start"]:
+                # check for final mapping
+                if last_mapping:
+                    output_range.append(input_range)
+                # check more mappings if not final mapping
+                continue
+            # 3. mapping range is completely within initial range
+            elif input_range["start"] <= source_start and source_end <= input_range["end"]:
+                # handle section within mapping range
+                output_range.append({
+                    "start": dest_start,
+                    "end": dest_end
+                })
+                # handle sections before and after match
+                if last_mapping:
+                    output_range.append({
+                        "start": input_range["start"],
+                        "end": source_start - 1
+                        })
+                    output_range.append({
+                        "start": source_end + 1,
+                        "end": input_range["end"]
+                        })
+                    continue
+                input_range_info.append({
+                    "start": input_range["start"],
+                    "end": source_start - 1
+                    })
+                input_range_info.append({
+                    "start": source_end + 1,
+                    "end": input_range["end"]
+                    })
+                break
+            # 4. mapping range overlaps with beginning of initial range
+            elif source_start <= input_range["start"] <= source_end <= input_range["end"]:
+                # handle section within mapping range
+                output_range.append({
+                    "start": dest_start + (input_range["start"] - source_start),
+                    "end": dest_end
+                })
+                # handle section after match
+                if last_mapping:
+                    output_range.append({
+                        "start": source_end + 1,
+                        "end": input_range["end"]
+                        })
+                    continue
+                input_range_info.append({
+                    "start": source_end + 1,
+                    "end": input_range["end"]
+                    })
+                break
+            # 5. mapping range overlaps with end of initial range
+            elif input_range["start"] <= source_start <= input_range["end"] <= source_end:
+                # handle section within mapping range
+                output_range.append({
+                    "start": dest_start,
+                    "end": dest_end + (input_range["end"] - source_end)
+                })
+                # handle section before match
+                if last_mapping:
+                    output_range.append({
+                        "start": input_range["start"],
+                        "end": source_start - 1
+                        })
+                    continue
+                input_range_info.append({
+                    "start": input_range["start"],
+                    "end": source_start - 1
+                    })
+                break
+            else:
+                raise("This shouldn't be possible")
+    
+    return output_range
+
+def find_location_ranges(almanac_path: str):
+    """Parses a TXT file to find ranges of seed planting locations"""
+    with open(almanac_path, newline='') as file:
+        file_data = file.read()
+        almanac_sections = file_data.split('\n\n')
+
+    almanac = {}
+    seeds_row = almanac_sections[0]
+    almanac["seeds"] = []
+    seed_map = [int(seeds) for seeds in seeds_row.split(": ")[1].split(" ")]
+    for i in range(0, len(seed_map), 2):
+        almanac["seeds"].append({
+            "start": seed_map[i],
+            "end": seed_map[i] + seed_map[i + 1] - 1,
+        })
+    for section in almanac_sections[1:]:
+        sub_sections = section.split("\n")
+        almanac[sub_sections[0].replace(":", "")] = [list.split(" ") for list in sub_sections[1:]]
+    
+    soil_ranges = map_ranges(almanac["seed-to-soil map"], almanac["seeds"])
+    fertilizer_ranges = map_ranges(almanac["soil-to-fertilizer map"], soil_ranges)
+    water_ranges = map_ranges(almanac["fertilizer-to-water map"], fertilizer_ranges)
+    light_ranges = map_ranges(almanac["water-to-light map"], water_ranges)
+    temp_ranges = map_ranges(almanac["light-to-temperature map"], light_ranges)
+    humidity_ranges = map_ranges(almanac["temperature-to-humidity map"], temp_ranges)
+    location_ranges = map_ranges(almanac["humidity-to-location map"], humidity_ranges) 
+
+    return location_ranges
+
+
 day5_part1 = min(find_locations('inputs/day5.txt'))
 print(f"Day 5 - Part 1: {day5_part1}")
+location_ranges = find_location_ranges('inputs/day5.txt')
+day5_part2 = min(location["start"] for location in location_ranges)
+print(f"Day 5 - Part 2: {day5_part2}")

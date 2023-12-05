@@ -84,6 +84,14 @@ class TestCalculations(unittest.TestCase):
         # test find_closest_location
         closest_location = min(calculations.find_locations(data["test_input"]))
         self.assertEqual(closest_location, data["part1_solution"])
+    
+    def test_day5_part2(self):
+        """Day 5 Part 2 Test Case."""
+        data = self.testData["day-5"]
+        # test find_closest_location
+        location_ranges = calculations.find_location_ranges(data["test_input"])
+        closest_location = min(location["start"] for location in location_ranges)
+        self.assertEqual(closest_location, data["part2_solution"])
 
 if __name__ == '__main__':
     unittest.main()
