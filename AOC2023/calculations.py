@@ -57,8 +57,8 @@ with open('inputs/day1.txt', newline='') as file:
     file_data = file.readlines()
 
 day1_part1 = sum(find_calibrations(file_data))
-day1_part2 = sum(find_calibrations_with_strings(file_data))
 print(f"Day 1 - Part 1: {day1_part1}")
+day1_part2 = sum(find_calibrations_with_strings(file_data))
 print(f"Day 1 - Part 2: {day1_part2}")
 
 #
@@ -119,8 +119,8 @@ with open('inputs/day2.txt', newline='') as file:
     file_data = file.readlines()
 
 day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
-day2_part2 = sum(find_minimum_cubes_power(file_data))
 print(f"Day 2 - Part 1: {day2_part1}")
+day2_part2 = sum(find_minimum_cubes_power(file_data))
 print(f"Day 2 - Part 2: {day2_part2}")
 
 #
@@ -222,13 +222,15 @@ def find_gear_ratios(grid: list[str]) -> list[int]:
         
     return gear_ratios
 
+# SOLUTIONS
+
 with open('inputs/day3.txt', newline='') as file:
     file_data = file.read()
     line_data = file_data.split('\n')
 
 day3_part1 = sum(find_part_numbers(line_data))
-day3_part2 = sum(find_gear_ratios(line_data))
 print(f"Day 3 - Part 1: {day3_part1}")
+day3_part2 = sum(find_gear_ratios(line_data))
 print(f"Day 3 - Part 2: {day3_part2}")
 
 #
@@ -268,9 +270,11 @@ with open('inputs/day4.txt', newline='') as file:
     file_data = file.read()
     card_data = file_data.split('\n')
 
+# SOLUTIONS
+
 day4_part1 = sum(find_card_scores(card_data))
-day4_part2 = sum(find_total_copies(card_data))
 print(f"Day 4 - Part 1: {day4_part1}")
+day4_part2 = sum(find_total_copies(card_data))
 print(f"Day 4 - Part 2: {day4_part2}")
 
 #
@@ -316,7 +320,7 @@ def find_locations(almanac_path: str):
     return locations
 
 def map_ranges(map_info: list[list[str]], input_range_info: list[dict]):
-    """Maps a range (start, end) to another range (start, end) or ranges"""
+    """Maps a range (start, end) to another range (start, end) or ranges."""
     output_range = []
     for input_range in input_range_info:
         for mapping in map_info:
@@ -412,7 +416,7 @@ def map_ranges(map_info: list[list[str]], input_range_info: list[dict]):
     return output_range
 
 def find_location_ranges(almanac_path: str):
-    """Parses a TXT file to find ranges of seed planting locations"""
+    """Parses a TXT file to find ranges of seed planting locations."""
     with open(almanac_path, newline='') as file:
         file_data = file.read()
         almanac_sections = file_data.split('\n\n')
@@ -440,6 +444,7 @@ def find_location_ranges(almanac_path: str):
 
     return location_ranges
 
+# SOLUTIONS
 
 day5_part1 = min(find_locations('inputs/day5.txt'))
 print(f"Day 5 - Part 1: {day5_part1}")
