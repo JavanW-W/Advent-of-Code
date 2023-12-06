@@ -3,6 +3,7 @@ import os
 import sys
 import unittest
 
+from math import prod
 from pathlib import Path
 
 import calculations
@@ -92,6 +93,17 @@ class TestCalculations(unittest.TestCase):
         location_ranges = calculations.find_location_ranges(data["test_input"])
         closest_location = min(location["start"] for location in location_ranges)
         self.assertEqual(closest_location, data["part2_solution"])
+    
+    def test_day6_part1(self):
+        """Day 6 Part 1 Test Case."""
+        data = self.testData["day-6"]
+        beat_records = calculations.find_beat_records(data["test_input"])
+        self.assertEqual(prod(beat_records), data["part1_solution"])
+    
+    def test_day6_part2(self):
+        """Day 6 Part 2 Test Case."""
+        data = self.testData["day-6"]
+        self.assertEqual(calculations.handle_big_race(data["test_input"]), data["part2_solution"])
 
 if __name__ == '__main__':
     unittest.main()

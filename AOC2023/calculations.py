@@ -1,6 +1,8 @@
 from config import DIGIT_STRINGS
 
+from math import prod
 import re
+import time
 
 #
 ## DAY 1 FUNCTIONS
@@ -56,10 +58,14 @@ def find_calibrations_with_strings(file_data: list[str]) -> list[int]:
 with open('inputs/day1.txt', newline='') as file:
     file_data = file.readlines()
 
+start_time = time.time()
 day1_part1 = sum(find_calibrations(file_data))
-print(f"Day 1 - Part 1: {day1_part1}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 1 - Part 1: {day1_part1}  {exec_time}ms")
+start_time = time.time()
 day1_part2 = sum(find_calibrations_with_strings(file_data))
-print(f"Day 1 - Part 2: {day1_part2}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 1 - Part 2: {day1_part2}  {exec_time}ms")
 
 #
 ## DAY 2 FUNCTIONS
@@ -118,10 +124,14 @@ def find_minimum_cubes_power(file_data: list[str]) -> list[int]:
 with open('inputs/day2.txt', newline='') as file:
     file_data = file.readlines()
 
+start_time = time.time()
 day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
-print(f"Day 2 - Part 1: {day2_part1}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 2 - Part 1: {day2_part1}  {exec_time}ms")
+start_time = time.time()
 day2_part2 = sum(find_minimum_cubes_power(file_data))
-print(f"Day 2 - Part 2: {day2_part2}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 2 - Part 2: {day2_part2}  {exec_time}ms")
 
 #
 # DAY 3 FUNCTIONS
@@ -228,10 +238,14 @@ with open('inputs/day3.txt', newline='') as file:
     file_data = file.read()
     line_data = file_data.split('\n')
 
+start_time = time.time()
 day3_part1 = sum(find_part_numbers(line_data))
-print(f"Day 3 - Part 1: {day3_part1}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 3 - Part 1: {day3_part1}  {exec_time}ms")
+start_time = time.time()
 day3_part2 = sum(find_gear_ratios(line_data))
-print(f"Day 3 - Part 2: {day3_part2}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 3 - Part 2: {day3_part2}  {exec_time}ms")
 
 #
 # DAY 4 FUNCTIONS
@@ -266,16 +280,20 @@ def find_total_copies(card_data: list[str]) -> list[int]:
 
     return total_copies
 
+# SOLUTIONS
+
 with open('inputs/day4.txt', newline='') as file:
     file_data = file.read()
     card_data = file_data.split('\n')
 
-# SOLUTIONS
-
+start_time = time.time()
 day4_part1 = sum(find_card_scores(card_data))
-print(f"Day 4 - Part 1: {day4_part1}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 4 - Part 1: {day4_part1}  {exec_time}ms")
+start_time = time.time()
 day4_part2 = sum(find_total_copies(card_data))
-print(f"Day 4 - Part 2: {day4_part2}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 4 - Part 2: {day4_part2}  {exec_time}ms")
 
 #
 # DAY 5 FUNCTIONS
@@ -446,8 +464,70 @@ def find_location_ranges(almanac_path: str):
 
 # SOLUTIONS
 
+start_time = time.time()
 day5_part1 = min(find_locations('inputs/day5.txt'))
-print(f"Day 5 - Part 1: {day5_part1}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 5 - Part 1: {day5_part1}  {exec_time}ms")
 location_ranges = find_location_ranges('inputs/day5.txt')
+start_time = time.time()
 day5_part2 = min(location["start"] for location in location_ranges)
-print(f"Day 5 - Part 2: {day5_part2}")
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 5 - Part 2: {day5_part2}  {exec_time}ms")
+
+#
+# DAY 6
+#
+
+def find_beat_records(race_data: str) -> list[int]:
+    """Given race times and record distances as a string, 
+    return list of number of ways you could beat the record for each race.
+    """
+    races, beat_records = [], []
+    times = race_data.splitlines()[0].split(":")[1].split()
+    records = race_data.splitlines()[1].split(":")[1].split()
+    for t, distance in zip(times, records):
+        races.append({
+            "time": int(t),
+            "record": int(distance)
+        })
+
+    for race in races:
+        beats = find_ways_to_beat(race)
+        beat_records.append(beats)
+
+    return beat_records
+
+def find_ways_to_beat(race_info: dict) -> int:
+    """Given race data (time and distance to beat), return the number of ways you could beat the record."""
+    beats = 0
+    for t in range(race_info["time"] + 1):
+        hold_t = t
+        travel_t = race_info["time"] - t
+        speed = hold_t
+        distance = speed * travel_t
+        if distance > race_info["record"]:
+            beats += 1
+    
+    return beats
+
+def handle_big_race(race_data: str) -> int:
+    time = race_data.splitlines()[0].split(":")[1].replace(" ","")
+    record = race_data.splitlines()[1].split(":")[1].replace(" ","")
+    race = {"time": int(time), "record": int(record)}
+    beats = find_ways_to_beat(race)
+
+    return beats
+
+# SOLUTIONS
+
+with open('./inputs/day6.txt', newline='') as file:
+    race_data = file.read()
+
+start_time = time.time()
+day6_part1 = prod(find_beat_records(race_data))
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 6 - Part 1: {day6_part1}  {exec_time}ms")
+start_time = time.time()
+day6_part2 = handle_big_race(race_data)
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 6 - Part 2: {day6_part2}  {exec_time}ms")
