@@ -1,6 +1,7 @@
-from config import DIGIT_STRINGS
+from config import DIGIT_STRINGS, CARD_VALUES
 
 from math import prod
+from statistics import mode
 import re
 import time
 
@@ -527,7 +528,81 @@ start_time = time.time()
 day6_part1 = prod(find_beat_records(race_data))
 exec_time = round(1000 * (time.time() - start_time), 4)
 print(f"Day 6 - Part 1: {day6_part1}  {exec_time}ms")
+# start_time = time.time()
+# day6_part2 = handle_big_race(race_data)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 6 - Part 2: {day6_part2}  {exec_time}ms")
+
+#
+# DAY 7 FUNCTIONS
+#
+
+def get_ranks(hand_data: list[str], part: int) -> list[int]:
+    """Given a list of hand data, find corresponding strength rankings.
+    
+    Hand types in order of strongest to weakest:
+    5 of a kind
+    4 of a kind
+    Full House (2 of a kind + 3 of a kind)
+    3 of a kind
+    2 pair
+    1 pair
+    High card
+    """
+    ranks, ids = [], []
+    for hand in hand_data:
+        hand_val = [CARD_VALUES[card] for card in hand]
+        if part == 2 and 'J' in hand:
+            for i, val in enumerate(hand_val):
+                hand_val[i] = 14 if val == 4 else val
+            try:
+                hand = hand.replace('J', mode(hand.replace('J','')))
+            except Exception: # the case that your hand is 'JJJJJ'
+                pass
+        counts = [hand.count(card) for card in set(hand)]
+        assert(sum(counts) == 5)
+        if counts.count(5) == 1:
+            ids.append([1] + [hand_val])
+        elif counts.count(4) == 1:
+            ids.append([2] + [hand_val])
+        elif counts.count(3) == 1:
+            if counts.count(2) == 1:
+                ids.append([3] + [hand_val])
+            else:
+                ids.append([4] + [hand_val])
+        elif counts.count(2) == 2:
+            ids.append([5] + [hand_val])
+        elif counts.count(2) == 1:
+            ids.append([6] + [hand_val])
+        elif counts.count(1) == 5:
+            ids.append([7] + [hand_val])
+    
+    for num in ids:
+        ranks.append(sorted(ids, reverse=True).index(num) + 1)
+
+    return ranks 
+
+def get_total_winnings(hand_data: list[str], part: int) -> int:
+    """Given a list of hands and bids, calculate total winnings."""
+    winnings = []
+    hands = [hand.strip()[:5] for hand in hand_data]
+    bids = [int(hand.strip()[5:]) for hand in hand_data]
+    ranks = get_ranks(hands, part)
+    for bid, rank in zip(bids, ranks):
+        winnings.append(bid * rank)
+    
+    return sum(winnings)
+
+# SOLUTIONS
+
+with open('./inputs/day7.txt', newline='') as file:
+    hand_data = file.readlines()
+
 start_time = time.time()
-day6_part2 = handle_big_race(race_data)
+day7_part1 = get_total_winnings(hand_data, 1)
 exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 6 - Part 2: {day6_part2}  {exec_time}ms")
+print(f"Day 7 - Part 1: {day7_part1}  {exec_time}ms")
+start_time = time.time()
+day7_part2 = get_total_winnings(hand_data, 2)
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 7 - Part 2: {day7_part2}  {exec_time}ms")

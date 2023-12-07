@@ -56,5 +56,10 @@
       "test_input": "Time:      7  15   30\nDistance:  9  40  200",
       "part1_solution": 288,
       "part2_solution": 71503
+    },
+    "day-7": {
+      "test_input": ["32T3K 765\n","T55J5 684\n","KK677 28\n","KTJJT 220\n","QQQJA 483"],
+      "part1_solution": 6440,
+      "part2_solution": 5905
     }
 }

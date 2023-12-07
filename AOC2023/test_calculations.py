@@ -105,6 +105,16 @@ class TestCalculations(unittest.TestCase):
         data = self.testData["day-6"]
         self.assertEqual(calculations.handle_big_race(data["test_input"]), data["part2_solution"])
 
+    def test_day7_part1(self):
+        """Day 7 Part 1 Test Case."""
+        data = self.testData["day-7"]
+        self.assertEqual(calculations.get_total_winnings(data["test_input"], 1), data["part1_solution"])
+
+    def test_day7_part2(self):
+        """Day 7 Part 2 Test Case."""
+        data = self.testData["day-7"]
+        self.assertEqual(calculations.get_total_winnings(data["test_input"], 2), data["part2_solution"])
+
 if __name__ == '__main__':
     unittest.main()
 
