@@ -340,6 +340,10 @@ def find_locations(almanac_path: str):
 def map_ranges(map_info: list[list[str]], input_range_info: list[dict]):
     """Maps a range (start, end) to another range (start, end) or ranges."""
     output_range = []
+    # 1 2 3 4 5 6 7 8
+    #   2 3 4   6 7 8 9 10
+    # 1-2 2-4 4-6 6-7 7-8
+    
     for input_range in input_range_info:
         for mapping in map_info:
             last_mapping = mapping == map_info[-1]
@@ -482,17 +486,19 @@ def find_beat_records(race_data: str) -> list[int]:
     """Given race times and record distances as a string, 
     return list of number of ways you could beat the record for each race.
     """
+    # M entries (3)
     races, beat_records = [], []
     times = race_data.splitlines()[0].split(":")[1].split()
     records = race_data.splitlines()[1].split(":")[1].split()
+    
     for t, distance in zip(times, records):
         races.append({
             "time": int(t),
             "record": int(distance)
         })
-
+    # O(M*N)
     for race in races:
-        beats = find_ways_to_beat(race)
+        beats = find_ways_to_beat(race) #O(N)
         beat_records.append(beats)
 
     return beat_records
@@ -500,6 +506,13 @@ def find_beat_records(race_data: str) -> list[int]:
 def find_ways_to_beat(race_info: dict) -> int:
     """Given race data (time and distance to beat), return the number of ways you could beat the record."""
     beats = 0
+    # Time complexity on this one?
+    # O(N) N is the max Time
+    # Pseudo-linear - Actually Exponential
+    # How do we speed it up?
+    # get the quadratic equation -> minh maxh
+    # maxh - minh = ways to beat. AND SOME EASY EXTRA WORK
+    # O(K) = O(1) constant time
     for t in range(race_info["time"] + 1):
         hold_t = t
         travel_t = race_info["time"] - t
@@ -511,9 +524,18 @@ def find_ways_to_beat(race_info: dict) -> int:
     return beats
 
 def handle_big_race(race_data: str) -> int:
+    # M entries on times / distances -> M=1
+    # 
     time = race_data.splitlines()[0].split(":")[1].replace(" ","")
     record = race_data.splitlines()[1].split(":")[1].replace(" ","")
     race = {"time": int(time), "record": int(record)}
+    # O(N) -
+    # 4 digits, what's the maximum value T that you cna have?
+    # 9999= 10K
+    # 5 digits,
+    # 99999 = 100K
+    # M digits
+    # 10^M
     beats = find_ways_to_beat(race)
 
     return beats
