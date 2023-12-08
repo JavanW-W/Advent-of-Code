@@ -3,7 +3,7 @@ import os
 import sys
 import unittest
 
-from math import prod
+from math import prod, lcm
 from pathlib import Path
 
 import calculations
@@ -114,6 +114,20 @@ class TestCalculations(unittest.TestCase):
         """Day 7 Part 2 Test Case."""
         data = self.testData["day-7"]
         self.assertEqual(calculations.get_total_winnings(data["test_input"], 2), data["part2_solution"])
+
+    def test_day8_part1(self):
+        """Day 8 Part 1 Test Cases."""
+        cases = [
+            {"case": "No repeat", "input_path": "./inputs/test/day8-1.txt", "output": 2},
+            {"case": "Need to repeat", "input_path": "./inputs/test/day8-2.txt", "output": 6}
+        ]
+        for case in cases:
+            self.assertEqual(calculations.find_steps(case["input_path"]), case["output"])
+
+    def test_day8_part2(self):
+        """Day 8 Part 2 Test Case."""
+        data = self.testData["day-8"]
+        self.assertEqual(lcm(*calculations.find_ghost_steps(data["test_input"])), data["part2_solution"])
 
 if __name__ == '__main__':
     unittest.main()

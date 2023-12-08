@@ -61,5 +61,9 @@
       "test_input": ["32T3K 765\n","T55J5 684\n","KK677 28\n","KTJJT 220\n","QQQJA 483"],
       "part1_solution": 6440,
       "part2_solution": 5905
+    },
+    "day-8": {
+      "test_input": "./inputs/test/day8-3.txt",
+      "part2_solution": 6
     }
 }

@@ -1,6 +1,6 @@
 from config import DIGIT_STRINGS, CARD_VALUES
 
-from math import prod
+from math import prod, lcm
 from statistics import mode
 import re
 import time
@@ -56,17 +56,17 @@ def find_calibrations_with_strings(file_data: list[str]) -> list[int]:
 
 # SOLUTIONS
 
-with open('inputs/day1.txt', newline='') as file:
-    file_data = file.readlines()
+# with open('inputs/day1.txt', newline='') as file:
+#     file_data = file.readlines()
 
-start_time = time.time()
-day1_part1 = sum(find_calibrations(file_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 1 - Part 1: {day1_part1}  {exec_time}ms")
-start_time = time.time()
-day1_part2 = sum(find_calibrations_with_strings(file_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 1 - Part 2: {day1_part2}  {exec_time}ms")
+# start_time = time.time()
+# day1_part1 = sum(find_calibrations(file_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 1 - Part 1: {day1_part1}  {exec_time}ms")
+# start_time = time.time()
+# day1_part2 = sum(find_calibrations_with_strings(file_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 1 - Part 2: {day1_part2}  {exec_time}ms")
 
 #
 ## DAY 2 FUNCTIONS
@@ -78,7 +78,7 @@ print(f"Day 1 - Part 2: {day1_part2}  {exec_time}ms")
 
 def find_max_colors(game_data) -> dict[str, int]:
     """Parses a TXT document of game data to return a dictionary of colors and their maximum number."""
-    max_colors = {"red": [], "blue": [], "green": []}
+    max_colors: dict = {"red": [], "blue": [], "green": []}
     # separate rounds
     rounds = game_data.split(":")[1].split(";")
     for round in rounds:
@@ -122,17 +122,17 @@ def find_minimum_cubes_power(file_data: list[str]) -> list[int]:
 
 # SOLUTIONS
 
-with open('inputs/day2.txt', newline='') as file:
-    file_data = file.readlines()
+# with open('inputs/day2.txt', newline='') as file:
+#     file_data = file.readlines()
 
-start_time = time.time()
-day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 2 - Part 1: {day2_part1}  {exec_time}ms")
-start_time = time.time()
-day2_part2 = sum(find_minimum_cubes_power(file_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 2 - Part 2: {day2_part2}  {exec_time}ms")
+# start_time = time.time()
+# day2_part1 = sum(find_possible_games(file_data, 12, 13, 14))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 2 - Part 1: {day2_part1}  {exec_time}ms")
+# start_time = time.time()
+# day2_part2 = sum(find_minimum_cubes_power(file_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 2 - Part 2: {day2_part2}  {exec_time}ms")
 
 #
 # DAY 3 FUNCTIONS
@@ -193,7 +193,7 @@ def find_part_numbers(grid: list[str]) -> list[int]:
 
 def find_adjacent_parts(asterisk_info: list[dict], number_info: list[dict]) -> list[list[int]]:
     """Match asterisks to part numbers adjacent to them."""
-    adjacent_parts = [[] for asterisk in asterisk_info]
+    adjacent_parts: list[list] = [[] for asterisk in asterisk_info]
     for i, asterisk in enumerate(asterisk_info):
         for number in number_info:
             # check for horizontal adjacency
@@ -235,18 +235,18 @@ def find_gear_ratios(grid: list[str]) -> list[int]:
 
 # SOLUTIONS
 
-with open('inputs/day3.txt', newline='') as file:
-    file_data = file.read()
-    line_data = file_data.split('\n')
+# with open('inputs/day3.txt', newline='') as file:
+#     file_data = file.read()
+#     line_data = file_data.split('\n')
 
-start_time = time.time()
-day3_part1 = sum(find_part_numbers(line_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 3 - Part 1: {day3_part1}  {exec_time}ms")
-start_time = time.time()
-day3_part2 = sum(find_gear_ratios(line_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 3 - Part 2: {day3_part2}  {exec_time}ms")
+# start_time = time.time()
+# day3_part1 = sum(find_part_numbers(line_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 3 - Part 1: {day3_part1}  {exec_time}ms")
+# start_time = time.time()
+# day3_part2 = sum(find_gear_ratios(line_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 3 - Part 2: {day3_part2}  {exec_time}ms")
 
 #
 # DAY 4 FUNCTIONS
@@ -283,24 +283,24 @@ def find_total_copies(card_data: list[str]) -> list[int]:
 
 # SOLUTIONS
 
-with open('inputs/day4.txt', newline='') as file:
-    file_data = file.read()
-    card_data = file_data.split('\n')
+# with open('inputs/day4.txt', newline='') as file:
+#     file_data = file.read()
+#     card_data = file_data.split('\n')
 
-start_time = time.time()
-day4_part1 = sum(find_card_scores(card_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 4 - Part 1: {day4_part1}  {exec_time}ms")
-start_time = time.time()
-day4_part2 = sum(find_total_copies(card_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 4 - Part 2: {day4_part2}  {exec_time}ms")
+# start_time = time.time()
+# day4_part1 = sum(find_card_scores(card_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 4 - Part 1: {day4_part1}  {exec_time}ms")
+# start_time = time.time()
+# day4_part2 = sum(find_total_copies(card_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 4 - Part 2: {day4_part2}  {exec_time}ms")
 
 #
 # DAY 5 FUNCTIONS
 #
 
-def map_x_to_y(map_info: list[list[str]], initial_list: list[int]) -> list[int]:
+def map_x_to_y(map_info: list, initial_list: list[int]) -> list[int]:
     new_list = initial_list
     for i, x in enumerate(initial_list):
         for mapping in map_info:
@@ -321,7 +321,7 @@ def find_locations(almanac_path: str):
         file_data = file.read()
         almanac_sections = file_data.split('\n\n')
 
-    almanac = {}
+    almanac: dict = {}
     seeds_row = almanac_sections[0]
     almanac["seeds"] = [int(seeds) for seeds in seeds_row.split(": ")[1].split(" ")]
     for section in almanac_sections[1:]:
@@ -465,15 +465,15 @@ def find_location_ranges(almanac_path: str):
 
 # SOLUTIONS
 
-start_time = time.time()
-day5_part1 = min(find_locations('inputs/day5.txt'))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 5 - Part 1: {day5_part1}  {exec_time}ms")
-location_ranges = find_location_ranges('inputs/day5.txt')
-start_time = time.time()
-day5_part2 = min(location["start"] for location in location_ranges)
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 5 - Part 2: {day5_part2}  {exec_time}ms")
+# start_time = time.time()
+# day5_part1 = min(find_locations('inputs/day5.txt'))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 5 - Part 1: {day5_part1}  {exec_time}ms")
+# location_ranges = find_location_ranges('inputs/day5.txt')
+# start_time = time.time()
+# day5_part2 = min(location["start"] for location in location_ranges)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 5 - Part 2: {day5_part2}  {exec_time}ms")
 
 #
 # DAY 6
@@ -521,13 +521,13 @@ def handle_big_race(race_data: str) -> int:
 
 # SOLUTIONS
 
-with open('./inputs/day6.txt', newline='') as file:
-    race_data = file.read()
+# with open('./inputs/day6.txt', newline='') as file:
+#     race_data = file.read()
 
-start_time = time.time()
-day6_part1 = prod(find_beat_records(race_data))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 6 - Part 1: {day6_part1}  {exec_time}ms")
+# start_time = time.time()
+# day6_part1 = prod(find_beat_records(race_data))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 6 - Part 1: {day6_part1}  {exec_time}ms")
 # start_time = time.time()
 # day6_part2 = handle_big_race(race_data)
 # exec_time = round(1000 * (time.time() - start_time), 4)
@@ -598,11 +598,73 @@ def get_total_winnings(hand_data: list[str], part: int) -> int:
 with open('./inputs/day7.txt', newline='') as file:
     hand_data = file.readlines()
 
-start_time = time.time()
-day7_part1 = get_total_winnings(hand_data, 1)
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 7 - Part 1: {day7_part1}  {exec_time}ms")
-start_time = time.time()
-day7_part2 = get_total_winnings(hand_data, 2)
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 7 - Part 2: {day7_part2}  {exec_time}ms")
+# start_time = time.time()
+# day7_part1 = get_total_winnings(hand_data, 1)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 7 - Part 1: {day7_part1}  {exec_time}ms")
+# start_time = time.time()
+# day7_part2 = get_total_winnings(hand_data, 2)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 7 - Part 2: {day7_part2}  {exec_time}ms")
+
+#
+# DAY 8 FUNCTIONS
+#
+
+def find_steps(input_path: str) -> int:
+    """Given a map of nodes and left/right instructions, find how many steps it takes to get to ZZZ."""
+    with open(input_path, newline='') as file:
+        map_data = file.readlines()
+
+    instructions = map_data[0].replace('L','0').replace('R','1').strip()
+    network = {}
+    for line in map_data[2:]:
+        network[line.split("=")[0].strip()] = line.split("=")[1].strip().replace(' ','').replace('(','').replace(')','').split(",")
+
+    current_node = 'AAA'
+    step = 0
+    while current_node != 'ZZZ':
+        go = step % len(instructions)
+        next_node = network[current_node][int(instructions[go])]
+        step += 1
+        current_node = next_node
+
+    return step
+
+def find_ghost_steps(input_path: str) -> list[int]:
+    """Given a map of nodes and left/right instructions, find how many steps it takes for a ghost to get from all 
+    positions that end with A to all positions that end with Z.
+    """
+    with open(input_path, newline='') as file:
+        map_data = file.readlines()
+
+    instructions = map_data[0].replace('L','0').replace('R','1').strip()
+    network = {}
+    for line in map_data[2:]:
+        network[line.split("=")[0].strip()] = line.split("=")[1].strip().replace(' ','').replace('(','').replace(')','').split(",")
+
+    a_regex = re.compile("..A")
+    a_nodes = set(filter(a_regex.match, network.keys()))
+    steps = []
+    for node in a_nodes:
+        step = 0
+        current_node = node
+        while current_node[-1] != 'Z':
+            go = step % len(instructions)
+            next_node = network[current_node][int(instructions[go])]
+            step += 1
+            current_node = next_node
+        steps.append(step)
+
+    return steps
+
+
+# SOLUTIONS
+# start_time = time.time()
+# day8_part1 = find_steps('./inputs/day8.txt')
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 8 - Part 1: {day8_part1}  {exec_time}ms")
+# start_time = time.time()
+# day8_part2 = lcm(*find_ghost_steps('./inputs/day8.txt'))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 8 - Part 2: {day8_part2}  {exec_time}ms")
