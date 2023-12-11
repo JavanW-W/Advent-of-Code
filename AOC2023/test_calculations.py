@@ -129,6 +129,16 @@ class TestCalculations(unittest.TestCase):
         """Day 8 Part 2 Test Case."""
         data = self.testData["day-8"]
         self.assertEqual(lcm(*calculations.find_ghost_steps(data["test_input"])), data["part2_solution"])
+    
+    def test_day9_part1(self):
+        """Day 9 Part 1 Test Case."""
+        data = self.testData["day-9"]
+        self.assertEqual(sum(calculations.find_end_extrapolations(data["test_input"])), data["part1_solution"])
+
+    def test_day9_part2(self):
+        """Day 9 Part 1 Test Case."""
+        data = self.testData["day-9"]
+        self.assertEqual(sum(calculations.find_start_extrapolations(data["test_input"])), data["part2_solution"])
 
     def test_day10_part1(self):
         """Day 10 Part 1 Test Cases."""

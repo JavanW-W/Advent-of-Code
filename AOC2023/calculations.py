@@ -659,6 +659,7 @@ def find_ghost_steps(input_path: str) -> list[int]:
 
 
 # SOLUTIONS
+
 # start_time = time.time()
 # day8_part1 = find_steps('./inputs/day8.txt')
 # exec_time = round(1000 * (time.time() - start_time), 4)
@@ -667,6 +668,66 @@ def find_ghost_steps(input_path: str) -> list[int]:
 # day8_part2 = lcm(*find_ghost_steps('./inputs/day8.txt'))
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 8 - Part 2: {day8_part2}  {exec_time}ms")
+
+#
+# DAY 9 FUNCTIONS
+#
+
+def find_start_extrapolations(input_path: str) -> list[int]:
+    with open(input_path, newline='') as file:
+        oasis_data = file.readlines()
+
+    before_values = []
+    for line in oasis_data:
+        values = line.split(" ")
+        first_vals = []
+        while True:
+            deltas = []
+            first_vals.append(int(values[0]))
+            for i in range(1, len(values)):
+                deltas.append(int(values[i]) - int(values[i-1]))
+            if set(deltas) == {0}:
+                break
+            values = deltas
+        extrap_vals = [0]
+        for i in range(len(first_vals)):
+            extrap_vals.append(first_vals[-1 - i] - extrap_vals[i])
+
+        before_values.append(extrap_vals[-1])      
+
+    return before_values
+
+def find_end_extrapolations(input_path: str) -> list[int]:
+    with open(input_path, newline='') as file:
+        oasis_data = file.readlines()
+
+    next_values = []
+    for line in oasis_data:
+        values = line.split(" ")
+        last_vals = []
+        while True:
+            deltas = []
+            last_vals.append(int(values[-1]))
+            for i in range(1, len(values)):
+                deltas.append(int(values[i]) - int(values[i-1]))
+            if set(deltas) == {0}:
+                break
+            values = deltas  
+
+        next_values.append(sum(last_vals))      
+
+    return next_values
+
+# SOLUTIONS
+
+# start_time = time.time()
+# day9_part1 = sum(find_end_extrapolations('./inputs/day9.txt'))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 9 - Part 1: {day9_part1}  {exec_time}ms")
+# start_time = time.time()
+# day9_part2 = sum(find_start_extrapolations('./inputs/day9.txt'))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 9 - Part 2: {day9_part2}  {exec_time}ms")
 
 #
 # DAY 10 FUNCTIONS
@@ -749,7 +810,8 @@ def find_farthest_pipe(input_path: str) -> int:
     return step
 
 # SOLUTIONS
-start_time = time.time()
-day10_part1 = find_farthest_pipe('./inputs/day10.txt')
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")
+
+# start_time = time.time()
+# day10_part1 = find_farthest_pipe('./inputs/day10.txt')
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")

@@ -66,6 +66,11 @@
       "test_input": "./inputs/test/day8-3.txt",
       "part2_solution": 6
     },
+    "day-9": {
+      "test_input": "./inputs/test/day9.txt",
+      "part1_solution": 114,
+      "part2_solution": 2
+    },
     "day-10": {
       "test_inputs": ["./inputs/test/day10-1.txt", "./inputs/test/day10-2.txt"],
       "part1_solutions": [4, 8]
