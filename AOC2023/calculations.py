@@ -1,5 +1,4 @@
-from config import DIGIT_STRINGS, CARD_VALUES
-
+import config
 from math import prod, lcm
 from statistics import mode
 import re
@@ -28,9 +27,9 @@ def get_first_digit(line: str) -> int:
         if char.isdigit():
             return(int(char))
         string_to_check += char
-        for str in DIGIT_STRINGS:
+        for str in config.DIGIT_STRINGS:
             if str in string_to_check:
-                return int(DIGIT_STRINGS[str])
+                return int(config.DIGIT_STRINGS[str])
                 
 def get_last_digit(line: str) -> int:
     """Checks a string from back to front the first instance of either a digit 
@@ -41,9 +40,9 @@ def get_last_digit(line: str) -> int:
         if char.isdigit():
             return(int(char))
         string_to_check = char + string_to_check
-        for str in DIGIT_STRINGS:
+        for str in config.DIGIT_STRINGS:
             if str in string_to_check:
-                return int(DIGIT_STRINGS[str])
+                return int(config.DIGIT_STRINGS[str])
 
                     
 def find_calibrations_with_strings(file_data: list[str]) -> list[int]:
@@ -551,7 +550,7 @@ def get_ranks(hand_data: list[str], part: int) -> list[int]:
     """
     ranks, ids = [], []
     for hand in hand_data:
-        hand_val = [CARD_VALUES[card] for card in hand]
+        hand_val = [config.CARD_VALUES[card] for card in hand]
         if part == 2 and 'J' in hand:
             for i, val in enumerate(hand_val):
                 hand_val[i] = 14 if val == 4 else val
@@ -668,3 +667,89 @@ def find_ghost_steps(input_path: str) -> list[int]:
 # day8_part2 = lcm(*find_ghost_steps('./inputs/day8.txt'))
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 8 - Part 2: {day8_part2}  {exec_time}ms")
+
+#
+# DAY 10 FUNCTIONS
+#
+
+def find_farthest_pipe(input_path: str) -> int:
+    """Given a map of pipes with a creature in it, find how many steps away the farthest section of pipe is from the creature."""
+    with open(input_path, newline='') as file:
+        map_data = file.readlines()
+
+    # find starting point
+    for row, line in enumerate(map_data):
+        try:
+            starting_point = {"row": row, "col": line.index("S")}
+        except ValueError:
+            continue
+
+    
+    # check all directions to initialize loop
+    direction_points = []
+    up = map_data[starting_point["row"] - 1][starting_point["col"]]
+    right = map_data[starting_point["row"]][starting_point["col"] + 1]
+    down = map_data[starting_point["row"] + 1][starting_point["col"]]
+    left = map_data[starting_point["row"]][starting_point["col"] - 1]
+    if "up" in config.PIPES[up]:
+        direction_points.append({
+            "move": "up",
+            "row": starting_point["row"] - 1,
+            "col": starting_point["col"]
+        })
+    if "right" in config.PIPES[right]:
+        direction_points.append({
+            "move": "right",
+            "row": starting_point["row"],
+            "col": starting_point["col"] + 1
+        })
+    if "down" in config.PIPES[down]:
+        direction_points.append({
+            "move": "down",
+            "row": starting_point["row"] + 1,
+            "col": starting_point["col"]
+        })
+    if "left" in config.PIPES[left]:
+        direction_points.append({
+            "move": "left",
+            "row": starting_point["row"],
+            "col": starting_point["col"] - 1
+        })
+
+    step = 0
+
+    pipe_points = [starting_point, starting_point]
+    while True:
+        for index, (point, direction) in enumerate(zip(pipe_points, direction_points)):
+            # what direction are you going in?
+            going = direction["move"]
+            # what is the character?
+            pipe_type = map_data[direction["row"]][direction["col"]]
+            # what are you doing?
+            directions = config.PIPES[pipe_type][going]
+            # your next pipe point will be your previous direction point
+            next_point = {
+                "row": direction["row"],
+                "col": direction["col"],
+            }
+            next_direction = {
+                "row": point["row"] + directions[0],
+                "col": point["col"] + directions[1],
+                "move": directions[2],
+            }
+            # reassign your pipe points
+            pipe_points[index] = next_point
+            direction_points[index] = next_direction
+
+        step += 1
+
+        if pipe_points[0] == pipe_points[1]:
+            break
+
+    return step
+
+# SOLUTIONS
+start_time = time.time()
+day10_part1 = find_farthest_pipe('./inputs/day10.txt')
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")

@@ -25,3 +25,13 @@ CARD_VALUES = {
     '3': 12,
     '2': 13
 }
+
+PIPES = {
+    "-": {"right": [0, 2, "right"], "left": [0, -2, "left"]},
+    "|": {"up": [-2, 0, "up"], "down": [2, 0, "down"]},
+    "L": {"down": [1, 1, "right"], "left": [-1, -1, "up"]},
+    "J": {"down": [1, -1, "left"], "right": [-1, 1, "up"]},
+    "F": {"up": [-1, 1, "right"], "left": [1, -1, "down"]},
+    "7": {"right": [1, 1, "down"], "up": [-1, -1, "left"]},
+    ".": {}
+}

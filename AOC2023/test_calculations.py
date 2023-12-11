@@ -122,12 +122,25 @@ class TestCalculations(unittest.TestCase):
             {"case": "Need to repeat", "input_path": "./inputs/test/day8-2.txt", "output": 6}
         ]
         for case in cases:
-            self.assertEqual(calculations.find_steps(case["input_path"]), case["output"])
+            with self.subTest(case["case"]):
+                self.assertEqual(calculations.find_steps(case["input_path"]), case["output"])
 
     def test_day8_part2(self):
         """Day 8 Part 2 Test Case."""
         data = self.testData["day-8"]
         self.assertEqual(lcm(*calculations.find_ghost_steps(data["test_input"])), data["part2_solution"])
+
+    def test_day10_part1(self):
+        """Day 10 Part 1 Test Cases."""
+        data = self.testData["day-10"]
+        cases = [
+            {"case": "Simple loop", "index": 0},
+            {"case": "Complex loop", "index": 1}
+        ]
+        for case in cases:
+            with self.subTest(case["case"]):
+                self.assertEqual(calculations.find_farthest_pipe(data["test_inputs"][case["index"]]), data["part1_solutions"][case["index"]])
+
 
 if __name__ == '__main__':
     unittest.main()
