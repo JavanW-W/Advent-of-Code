@@ -151,6 +151,10 @@ class TestCalculations(unittest.TestCase):
             with self.subTest(case["case"]):
                 self.assertEqual(calculations.find_farthest_pipe(data["test_inputs"][case["index"]]), data["part1_solutions"][case["index"]])
 
+    def test_day12_part1(self):
+        """Day 12 Part 1 Test Case."""
+        data = self.testData["day-12"]
+        self.assertEqual(sum(calculations.find_possible_arrangements(data["test_input"])), data["part1_solution"])
 
 if __name__ == '__main__':
     unittest.main()

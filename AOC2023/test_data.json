@@ -74,5 +74,9 @@
     "day-10": {
       "test_inputs": ["./inputs/test/day10-1.txt", "./inputs/test/day10-2.txt"],
       "part1_solutions": [4, 8]
+    },
+    "day-12": {
+      "test_input": "./inputs/test/day12.txt",
+      "part1_solution": 21
     }
 }

@@ -1,5 +1,6 @@
 import config
 from math import prod, lcm
+from itertools import product
 from statistics import mode
 import re
 import time
@@ -815,3 +816,48 @@ def find_farthest_pipe(input_path: str) -> int:
 # day10_part1 = find_farthest_pipe('./inputs/day10.txt')
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")
+
+#
+# DAY 12 FUNCTIONS
+#
+
+def find_possible_arrangements(input_path: str) -> list[int]:
+    """Given a list of hot springs with unknown arrangements, return list of possible arrangements for each spring."""
+    with open(input_path, newline='') as file:
+        spring_data = file.readlines()
+
+    num_arr = []
+    for row in spring_data:
+        # get info from the row
+        conditions = [i for i in row.split(" ")[0]]
+        contig_groups = [int(i.strip()) for i in row.split(" ")[1].split(",")]
+        # make a regex for this for later
+        regex_pattern ="\.*"
+        for i, val in enumerate(contig_groups):
+            if i == len(contig_groups) - 1:
+                regex_pattern += f"{'#' * val}\.*"
+            else:
+                regex_pattern += f"{'#' * val}\.+"
+        matches = 0
+        # find all possible permutations of the unknown values
+        unknowns = int(conditions.count("?"))
+        perm = product('.#', repeat=unknowns)
+        possibilities = [''.join(i) for i in list(perm)]
+        # slot them into the ? indices and compare against the contig_groups regex
+        indices = [i for i, x in enumerate(conditions) if x == "?"]
+        for possibility in possibilities:
+            for i, index in enumerate(indices):
+                conditions[index] = possibility[i]
+            match = re.fullmatch(regex_pattern, ''.join(conditions))
+            if match:
+                matches += 1
+        num_arr.append(matches)
+
+    return num_arr
+
+# SOLUTIONS
+
+start_time = time.time()
+day12_part1 = sum(find_possible_arrangements('./inputs/day12.txt'))
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 12 - Part 1: {day12_part1}  {exec_time}ms")
