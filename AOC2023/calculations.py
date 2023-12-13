@@ -1,6 +1,6 @@
 import config
-from math import prod, lcm
-from itertools import product
+from math import prod, lcm, comb
+from itertools import product, combinations
 from statistics import mode
 import re
 import time
@@ -818,6 +818,78 @@ def find_farthest_pipe(input_path: str) -> int:
 # print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")
 
 #
+# DAY 11 FUNCTIONS
+#
+
+def expand_universe(galaxy_data: list[str]) -> list[str]:
+    """Widen each row/column with no galaxy in it by 100%."""
+    expanded_universe = []
+    for row in galaxy_data:
+        if "#" in row:
+            expanded_universe.append(row)
+        else:
+            expanded_universe.extend([row]*2)
+    expanded_universe = list(zip(*expanded_universe))  # transpose
+    iter = enumerate(expanded_universe)
+    for i, col in iter:
+        if "#" not in col:
+            expanded_universe.insert(i, col)
+            next(iter)
+    expanded_universe = list(zip(*expanded_universe))  # transpose
+    expanded_universe = [''.join(i for i in row) for row in expanded_universe]
+    return expanded_universe
+
+
+def traverse_galaxies(input_path: str, part: int, expansion_constant: int = None) -> list[int]:
+    """Given an observatory view, return list of shortest path between each pair of galaxies."""
+    with open(input_path, newline='') as file:
+        galaxy_data = file.readlines()
+
+    if part == 1:
+        galaxy_data = expand_universe(galaxy_data)
+    elif part == 2:
+        galaxy_data = [row.strip() for row in galaxy_data]
+
+    # find coordinates of galaxies
+    galaxies = []
+    for i, row in enumerate(galaxy_data):
+        for j, val in enumerate(row):
+            if val == "#":
+                galaxies.append((i,j))
+    pairs = list(combinations(galaxies, 2))
+    distances = []
+    for pair in pairs:
+        rows = sorted([pair[0][0], pair[1][0]])
+        cols = sorted([pair[0][1], pair[1][1]])
+        if part == 1:
+            distances.append((rows[1] - rows[0]) + (cols[1] - cols[0]))
+        if part == 2:
+            # figure out how many empty rows/cols are between the pair
+            row_expansions, col_expansions = 0, 0
+            for i in range(rows[0], rows[1]):
+                if "#" not in galaxy_data[i]:
+                    row_expansions += 1
+            trans_universe = list(zip(*galaxy_data))
+            for i in range(cols[0], cols[1]) :
+                if "#" not in trans_universe[i]:    
+                    col_expansions += 1
+            distances.append(rows[1] - rows[0] + row_expansions*(expansion_constant - 1)
+                             + (cols[1] - cols[0] + col_expansions*(expansion_constant - 1)))
+    
+    return distances
+
+# SOLUTIONS
+
+# start_time = time.time()
+# day11_part1 = sum(traverse_galaxies('./inputs/day11.txt', 1))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 11 - Part 1: {day11_part1}  {exec_time}ms")
+start_time = time.time()
+day11_part2 = sum(traverse_galaxies('./inputs/day11.txt', 2, 1000000))
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 11 - Part 2: {day11_part2}  {exec_time}ms")
+
+#
 # DAY 12 FUNCTIONS
 #
 
@@ -857,7 +929,7 @@ def find_possible_arrangements(input_path: str) -> list[int]:
 
 # SOLUTIONS
 
-start_time = time.time()
-day12_part1 = sum(find_possible_arrangements('./inputs/day12.txt'))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 12 - Part 1: {day12_part1}  {exec_time}ms")
+# start_time = time.time()
+# day12_part1 = sum(find_possible_arrangements('./inputs/day12.txt'))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 12 - Part 1: {day12_part1}  {exec_time}ms")

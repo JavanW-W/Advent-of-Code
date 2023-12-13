@@ -151,6 +151,24 @@ class TestCalculations(unittest.TestCase):
             with self.subTest(case["case"]):
                 self.assertEqual(calculations.find_farthest_pipe(data["test_inputs"][case["index"]]), data["part1_solutions"][case["index"]])
 
+    def test_day11_part1(self):
+        """Day 11 Part 1 Test Case."""
+        data = self.testData["day-11"]
+        self.assertEqual(sum(calculations.traverse_galaxies(data["test_input"], 1)), data["part1_solution"])
+
+    def test_day11_part2(self):
+        """Day 11 Part 2 Test Case."""
+        data = self.testData["day-11"]
+        cases = [
+            {"case": "Small expansion (Part 1)", "index": 0},
+            {"case": "Medium expansion", "index": 1},
+            {"case": "Large expansion", "index": 2}
+        ]
+        for case in cases:
+            with self.subTest(case["case"]):
+                self.assertEqual(sum(calculations.traverse_galaxies(data["test_input"], 2, data["part2_constants"][case["index"]])), 
+                                 data["part2_solutions"][case["index"]])
+
     def test_day12_part1(self):
         """Day 12 Part 1 Test Case."""
         data = self.testData["day-12"]
