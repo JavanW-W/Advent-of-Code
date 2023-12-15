@@ -1144,3 +1144,69 @@ def find_mirror_summary(input_path: str, part: int) -> int:
 # day13_part2 = find_mirror_summary('./inputs/day13.txt', 2)
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 13 - Part 2: {day13_part2}  {exec_time}ms")
+
+#
+# DAY 15 FUNCTIONS
+#
+
+def run_hash_algorithm(input_string: str) -> int:
+    """Given a string, return the output of the HASH algorithm"""
+    current_value = 0
+    for char in input_string:
+        # Determine the ASCII code for the current character of the string.
+        # Increase the current value by the ASCII code you just determined.
+        current_value += ord(char)
+        # Set the current value to itself multiplied by 17.
+        current_value = current_value * 17
+        # Set the current value to the remainder of dividing itself by 256.
+        current_value = current_value % 256
+
+    return current_value
+
+def find_hash_sum(initialization_sequence: str) -> int:
+    """Given a sequence of steps, return the sum of results of a HASH algorithm."""
+    steps = initialization_sequence.strip().split(",")
+    hash_results = []
+    for step in steps:
+        hash_results.append(run_hash_algorithm(step))
+
+    return sum(hash_results)
+
+def find_focusing_power(initialization_sequence: str) -> int:
+    """Given box and lens information, return the sum of the focusing power of each lens."""
+    steps = initialization_sequence.strip().split(",")
+    boxes = [{} for _ in range(256)]
+    for step in steps:
+        label = step.split("=")[0].split("-")[0]
+        box = run_hash_algorithm(label)
+        if "=" in step:
+            value = step.split("=")[1]
+            boxes[box][label] = value
+        elif "-" in step:
+            if label in boxes[box]:
+                del boxes[box][label]
+    
+    focusing_power = 0
+    for i, box in enumerate(boxes):
+        boxes[i] = [(key, int(value)) for key, value in box.items()]
+        for j, lens in enumerate(boxes[i]):
+            focusing_power += (i + 1) * (j + 1) * lens[1]
+
+    return focusing_power
+
+# SOLUTIONS
+
+# with open('./inputs/day15.txt',newline='') as file:
+#     input_sequence = file.read().strip()
+# start_time = time.time()
+# day15_part1 = find_hash_sum(input_sequence)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 15 - Part 1: {day15_part1}  {exec_time}ms")
+
+# with open('./inputs/day15.txt',newline='') as file:
+#     input_sequence = file.read().strip()
+# start_time = time.time()
+# day15_part2 = find_focusing_power(input_sequence)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 15 - Part 2: {day15_part2}  {exec_time}ms")
+

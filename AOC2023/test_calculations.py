@@ -188,6 +188,20 @@ class TestCalculations(unittest.TestCase):
     #     """Day 14 Part 1 Test Case."""
     #     data = self.testData["day-14"]
     #     self.assertEqual(calculations.find_rock_load(data["test_input"]), data["part1_solution"])
+        
+    def test_day15_hash_algorithm(self):
+        """Day 15 Part 1 HASH algorithm function test."""
+        self.assertEqual(calculations.run_hash_algorithm("HASH"), 52)
+
+    def test_day15_part1(self):
+        """Day 15 Part 1 Test Case."""
+        data = self.testData["day-15"]
+        self.assertEqual(calculations.find_hash_sum(data["test_input"]), data["part1_solution"])
+    
+    def test_day15_part2(self):
+        """Day 15 Part 2 Test Case."""
+        data = self.testData["day-15"]
+        self.assertEqual(calculations.find_focusing_power(data["test_input"]), data["part2_solution"])
 
 if __name__ == '__main__':
     unittest.main()
