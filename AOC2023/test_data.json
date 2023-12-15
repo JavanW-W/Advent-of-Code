@@ -84,5 +84,14 @@
     "day-12": {
       "test_input": "./inputs/test/day12.txt",
       "part1_solution": 21
+    },
+    "day-13": {
+      "test_input": "./inputs/test/day13.txt",
+      "part1_solution": 405,
+      "part2_solution": 400
+    },
+    "day-14": {
+      "test_input": "./inputs/test/day14.txt",
+      "part1_solution": 136
     }
 }

@@ -1,5 +1,5 @@
 import config
-from math import prod, lcm, comb
+from math import prod, lcm, comb, floor, ceil
 from itertools import product, combinations
 from statistics import mode
 import re
@@ -883,11 +883,11 @@ def traverse_galaxies(input_path: str, part: int, expansion_constant: int = None
 # start_time = time.time()
 # day11_part1 = sum(traverse_galaxies('./inputs/day11.txt', 1))
 # exec_time = round(1000 * (time.time() - start_time), 4)
-# print(f"Day 11 - Part 1: {day11_part1}  {exec_time}ms")
-start_time = time.time()
-day11_part2 = sum(traverse_galaxies('./inputs/day11.txt', 2, 1000000))
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 11 - Part 2: {day11_part2}  {exec_time}ms")
+# # print(f"Day 11 - Part 1: {day11_part1}  {exec_time}ms")
+# start_time = time.time()
+# day11_part2 = sum(traverse_galaxies('./inputs/day11.txt', 2, 1000000))
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 11 - Part 2: {day11_part2}  {exec_time}ms")
 
 #
 # DAY 12 FUNCTIONS
@@ -933,3 +933,214 @@ def find_possible_arrangements(input_path: str) -> list[int]:
 # day12_part1 = sum(find_possible_arrangements('./inputs/day12.txt'))
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 12 - Part 1: {day12_part1}  {exec_time}ms")
+
+#
+# DAY 13 FUNCTIONS
+#
+
+def all_but_one(iterable) -> bool:
+    """Returns true if all but one statement in the iterable is true."""
+    truths = [result for result in iterable]
+    if truths.count(False) == 1:
+        return truths.index(False)
+    else:
+        return False
+
+def find_mirror_summary(input_path: str, part: int) -> int:
+    """Given a list of patterns, return the summary of notes re: mirror locations
+    i.e., sum(number of columns to the left of each vertical line of reflection)
+    + 100*(sum(number of rows above each horizontal line of reflection)).
+    """
+    with open(input_path, newline='') as file:
+        pattern_data = file.read()
+
+    # massage data
+    # split up by each pattern
+    horizontal_reflections, vertical_reflections = [], []
+    patterns = [pattern.split('\n') for pattern in pattern_data.split('\n\n')]
+    for x, pattern in enumerate(patterns):
+        reflection_axis = 0
+        search_over = False
+
+        # check rows
+        for i in range(len(pattern) - 1):
+            # check for the edge case where the smudge is on the edge
+            if part == 2:
+                if all_but_one(pattern[i][j] == pattern[i+1][j] for j in range(len(pattern[i]))) is not False:
+                    if i == 0:
+                        horizontal_reflections.append(1)
+                        search_over = True
+                    elif i == len(pattern) - 2:
+                        horizontal_reflections.append(len(pattern) - 1)
+                        search_over = True
+                    else:
+                        reflection_axis = i + 0.5
+                        # see if you're over the halfway point
+                        if ceil(reflection_axis) > (len(pattern) - 1) / 2:
+                            mirror_i = ceil(reflection_axis)
+                            search_over = all_but_one(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if search_over is not False:
+                                horizontal_reflections.append(mirror_i)
+                            else:
+                                continue
+                        else:
+                            mirror_i = floor(reflection_axis)
+                            search_over = all_but_one(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if search_over is not False:
+                                horizontal_reflections.append(mirror_i + 1)
+                            else:
+                                continue
+                if search_over is not False:
+                    break
+            # check if it's the same as the one after
+            if pattern[i] == pattern[i + 1]:
+                # check for edge case where there is only one row above
+                if i == 0 and part == 1:
+                    horizontal_reflections.append(1)
+                    search_over = True
+                else:
+                    reflection_axis = i + 0.5
+                    # see if you're over the halfway point
+                    if ceil(reflection_axis) > (len(pattern) - 1) / 2:
+                        mirror_i = ceil(reflection_axis)
+                        if part == 1:
+                            search_over = all(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if search_over is not False:
+                                horizontal_reflections.append(mirror_i)
+                            else:
+                                continue
+                        elif part == 2:
+                            off_row = all_but_one(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if off_row is not False:
+                                index = list(range(len(pattern) - mirror_i))[off_row]
+                                search_over = all_but_one(pattern[mirror_i - 1 - index][k] == pattern[mirror_i + index][k] for k in range(len(pattern[mirror_i + index])))
+                                if search_over is not False:
+                                    horizontal_reflections.append(mirror_i)
+                                else:
+                                    continue
+                            else:
+                                continue
+                    else:
+                        mirror_i = floor(reflection_axis)
+                        if part == 1:
+                            search_over = all(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if search_over is not False:
+                                horizontal_reflections.append(mirror_i + 1)
+                            else:
+                                continue
+                        elif part == 2:
+                            off_row = all_but_one(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if off_row is not False:
+                                index = list(range(mirror_i + 1))[off_row]
+                                search_over = all_but_one(pattern[mirror_i - index][k] == pattern[mirror_i + 1 + index][k] for k in range(len(pattern[mirror_i + index])))
+                                if search_over is not False:
+                                    horizontal_reflections.append(mirror_i + 1)
+                                else:
+                                    continue
+                            else:
+                                continue
+
+                if search_over is not False:
+                    break
+
+        if search_over is not False:
+            continue
+
+        # check columns
+        pattern = list(zip(*pattern))  # transpose
+        for i in range(len(pattern) - 1):
+            # check for the edge case where the smudge is on the edge
+            if part == 2:
+                if all_but_one(pattern[i][j] == pattern[i+1][j] for j in range(len(pattern[i]))) is not False:
+                    if i == 0:
+                        vertical_reflections.append(1)
+                        search_over = True
+                    elif i == len(pattern) - 2:
+                        vertical_reflections.append(len(pattern) - 1)
+                        search_over = True
+                    else:
+                        reflection_axis = i + 0.5
+                        # see if you're over the halfway point
+                        if ceil(reflection_axis) > (len(pattern) - 1) / 2:
+                            mirror_i = ceil(reflection_axis)
+                            search_over = all_but_one(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if search_over is not False:
+                                vertical_reflections.append(mirror_i)
+                            else:
+                                continue
+                        else:
+                            mirror_i = floor(reflection_axis)
+                            search_over = all_but_one(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if search_over is not False:
+                                vertical_reflections.append(mirror_i + 1)
+                            else:
+                                continue
+                if search_over is not False:
+                    break
+            # check if it's the same as the one after
+            if pattern[i] == pattern[i + 1]:
+                # check for edge case where there is only one column to the left
+                if i == 0 and part == 1:
+                    vertical_reflections.append(1)
+                    search_over = True
+                else:
+                    reflection_axis = i + 0.5
+                    # see if you're over the halfway point
+                    if ceil(reflection_axis) > (len(pattern) - 1) / 2:
+                        mirror_i = ceil(reflection_axis)
+                        if part == 1:
+                            search_over = all(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if search_over is not False:
+                                vertical_reflections.append(mirror_i)
+                            else:
+                                continue
+                        if part == 2:
+                            off_col = all_but_one(pattern[mirror_i - 1 - j] == pattern[mirror_i + j] for j in range(len(pattern) - mirror_i))
+                            if off_col is not False:
+                                index = list(range(len(pattern) - mirror_i))[off_col]
+                                search_over = all_but_one(pattern[mirror_i - 1 - index][k] == pattern[mirror_i + index][k] for k in range(len(pattern[mirror_i + index])))
+                                if search_over is not False:
+                                    vertical_reflections.append(mirror_i)
+                                else:
+                                    continue
+                            else:
+                                continue
+                    else:
+                        mirror_i = floor(reflection_axis)
+                        if part == 1:
+                            search_over = all(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if search_over is not False:
+                                vertical_reflections.append(mirror_i + 1)
+                            else:
+                                continue
+                        elif part == 2:
+                            off_col = all_but_one(pattern[mirror_i - j] == pattern[mirror_i + 1 + j] for j in range(mirror_i + 1))
+                            if off_col is not False:
+                                index = list(range(mirror_i + 1))[off_col]
+                                search_over = all_but_one(pattern[mirror_i - index][k] == pattern[mirror_i + 1 + index][k] for k in range(len(pattern[mirror_i - index])))
+                                if search_over is not False:
+                                    vertical_reflections.append(mirror_i + 1)
+                                else:
+                                    continue
+                            else:
+                                continue
+
+                if search_over is not False:
+                    break
+
+        if search_over is False:
+            raise ValueError(f"No match found! Pattern {x}")
+            
+    return sum(vertical_reflections) + 100 * sum(horizontal_reflections)
+
+# SOLUTIONS
+
+# start_time = time.time()
+# day13_part1 = find_mirror_summary('./inputs/day13.txt', 1)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 13 - Part 1: {day13_part1}  {exec_time}ms")
+
+# start_time = time.time()
+# day13_part2 = find_mirror_summary('./inputs/day13.txt', 2)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 13 - Part 2: {day13_part2}  {exec_time}ms")

@@ -174,6 +174,21 @@ class TestCalculations(unittest.TestCase):
         data = self.testData["day-12"]
         self.assertEqual(sum(calculations.find_possible_arrangements(data["test_input"])), data["part1_solution"])
 
+    def test_day13_part1(self):
+        """Day 13 Part 1 Test Case."""
+        data = self.testData["day-13"]
+        self.assertEqual(calculations.find_mirror_summary(data["test_input"], 1), data["part1_solution"])
+    
+    def test_day13_part2(self):
+        """Day 13 Part 2 Test Case."""
+        data = self.testData["day-13"]
+        self.assertEqual(calculations.find_mirror_summary(data["test_input"], 2), data["part2_solution"])
+
+    # def test_day14_part1(self):
+    #     """Day 14 Part 1 Test Case."""
+    #     data = self.testData["day-14"]
+    #     self.assertEqual(calculations.find_rock_load(data["test_input"]), data["part1_solution"])
+
 if __name__ == '__main__':
     unittest.main()
 
