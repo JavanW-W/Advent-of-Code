@@ -1146,6 +1146,21 @@ def find_mirror_summary(input_path: str, part: int) -> int:
 # print(f"Day 13 - Part 2: {day13_part2}  {exec_time}ms")
 
 #
+# DAY 14 FUNCTIONS
+#
+
+# def find_rock_load(input_path: str) -> int:
+#     """Given a"""
+#     with open(input_path, newline='') as file:
+#         rock_data = file.readlines()
+    
+#     rock_load = 0
+
+#     return rock_load
+
+# SOLUTIONS
+
+#
 # DAY 15 FUNCTIONS
 #
 
@@ -1210,3 +1225,140 @@ def find_focusing_power(initialization_sequence: str) -> int:
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 15 - Part 2: {day15_part2}  {exec_time}ms")
 
+#
+# DAY 16 FUNCTIONS
+#
+
+def move(input_coord: tuple, direction: str) -> tuple:
+    if direction == "right":
+        return (input_coord[0], input_coord[1] + 1)
+    if direction == "left":
+        return (input_coord[0], input_coord[1] - 1)
+    elif direction == "up":
+        return (input_coord[0] - 1, input_coord[1])
+    if direction == "down":
+        return (input_coord[0] + 1, input_coord[1])
+
+def find_energized_tiles(input_path: str) -> int:
+    """Given a map of splitters and mirrors, return the number of tiles containing beams."""
+    with open(input_path, newline='') as file:
+        cave_grid = [[i for i in line.strip()] for line in file.readlines()]
+    
+    beam_grid = [[0 for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
+    dir_grid = [[set() for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
+    init_beam = {
+        "coord": (0, 0),
+        "dir": "right"
+    }
+    next_beam = init_beam
+    beams = [init_beam]
+    for beam in beams:
+        while True:
+            beam_grid[beam["coord"][0]][beam["coord"][1]] += 1
+            dir_grid[beam["coord"][0]][beam["coord"][1]].add(beam["dir"])
+            if cave_grid[beam["coord"][0]][beam["coord"][1]] == '.':
+                next_beam = {
+                    "coord": move(beam["coord"], beam["dir"]),
+                    "dir": beam["dir"]
+                }
+            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '\\':
+                if beam["dir"] == "right":
+                    next_beam = {
+                        "coord": move(beam["coord"], "down"),
+                        "dir": "down"
+                    }
+                elif beam["dir"] == "left":
+                    next_beam = {
+                        "coord": move(beam["coord"], "up"),
+                        "dir": "up"
+                    }
+                elif beam["dir"] == "up":
+                    next_beam = {
+                        "coord": move(beam["coord"], "left"),
+                        "dir": "left"
+                    }
+                elif beam["dir"] == "down":
+                    next_beam = {
+                        "coord": move(beam["coord"], "right"),
+                        "dir": "right"
+                    }
+            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '/':
+                if beam["dir"] == "right":
+                    next_beam = {
+                        "coord": move(beam["coord"], "up"),
+                        "dir": "up"
+                    }
+                elif beam["dir"] == "left":
+                    next_beam = {
+                        "coord": move(beam["coord"], "down"),
+                        "dir": "down"
+                    }
+                elif beam["dir"] == "up":
+                    next_beam = {
+                        "coord": move(beam["coord"], "right"),
+                        "dir": "right"
+                    }
+                elif beam["dir"] == "down":
+                    next_beam = {
+                        "coord": move(beam["coord"], "left"),
+                        "dir": "left"
+                    }
+            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '-':
+                if beam["dir"] == "right" or beam["dir"] == "left":
+                    next_beam = {
+                        "coord": move(beam["coord"], beam["dir"]),
+                        "dir": beam["dir"]
+                    }
+                elif beam["dir"] == "up" or beam["dir"] == "down":
+                    # handle splitting
+                    # pick a direction
+                    next_beam = {
+                        "coord": move(beam["coord"], "right"),
+                        "dir": "right"
+                    }
+                    # append the other to the "beams" list
+                    beams.append({
+                        "coord": move(beam["coord"], "left"),
+                        "dir": "left"
+                    })
+            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '|':
+                if beam["dir"] == "up" or beam["dir"] == "down":
+                    next_beam = {
+                        "coord": move(beam["coord"], beam["dir"]),
+                        "dir": beam["dir"]
+                    }
+                elif beam["dir"] == "right" or beam["dir"] == "left":
+                    # handle splitting
+                    # pick a direction
+                    next_beam = {
+                        "coord": move(beam["coord"], "up"),
+                        "dir": "up"
+                    }
+                    # append the other to the "beams" list
+                    beams.append({
+                        "coord": move(beam["coord"], "down"),
+                        "dir": "down"
+                    })
+
+            # break if you've hit an edge or you've already come at the next space from the same direction
+            if (any(coord < 0 for coord in next_beam["coord"]) or
+                next_beam["coord"][0] > len(cave_grid) - 1 or
+                next_beam["coord"][1] > len(cave_grid[0]) - 1 or
+                next_beam["dir"] in dir_grid[next_beam["coord"][0]][next_beam["coord"][1]]
+            ):
+                break
+
+            beam = next_beam
+
+    return sum(1 for row in dir_grid for element in row if element != set())
+
+# SOLUTIONS
+
+start_time = time.time()
+day16_part1 = find_energized_tiles('./inputs/day16.txt')
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 16 - Part 1: {day16_part1}  {exec_time}ms")
+
+# 8171 is too low
+# 8225 is not the right answer
+# 8250 is not the right answer

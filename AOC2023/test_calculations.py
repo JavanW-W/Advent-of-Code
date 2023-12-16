@@ -203,6 +203,11 @@ class TestCalculations(unittest.TestCase):
         data = self.testData["day-15"]
         self.assertEqual(calculations.find_focusing_power(data["test_input"]), data["part2_solution"])
 
+    def test_day16_part1(self):
+        """Day 16 Part 1 Test Case."""
+        data = self.testData["day-16"]
+        self.assertEqual(calculations.find_energized_tiles(data["test_input"]), data["part1_solution"])
+
 if __name__ == '__main__':
     unittest.main()
 

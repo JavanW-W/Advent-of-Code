@@ -98,5 +98,9 @@
       "test_input": "rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7",
       "part1_solution": 1320,
       "part2_solution": 145
+    },
+    "day-16": {
+      "test_input": "./inputs/test/day16.txt",
+      "part1_solution": 46
     }
 }
