@@ -1250,10 +1250,16 @@ def find_energized_tiles(input_path: str) -> int:
         "coord": (0, 0),
         "dir": "right"
     }
-    next_beam = init_beam
     beams = [init_beam]
     for beam in beams:
         while True:
+            # break if you've hit an edge or you've already come at the next space from the same direction
+            if (any(coord < 0 for coord in beam["coord"]) or
+                beam["coord"][0] > len(cave_grid) - 1 or
+                beam["coord"][1] > len(cave_grid[0]) - 1 or
+                beam["dir"] in dir_grid[beam["coord"][0]][beam["coord"][1]]
+            ):
+                break
             beam_grid[beam["coord"][0]][beam["coord"][1]] += 1
             dir_grid[beam["coord"][0]][beam["coord"][1]].add(beam["dir"])
             if cave_grid[beam["coord"][0]][beam["coord"][1]] == '.':
@@ -1339,14 +1345,6 @@ def find_energized_tiles(input_path: str) -> int:
                         "coord": move(beam["coord"], "down"),
                         "dir": "down"
                     })
-
-            # break if you've hit an edge or you've already come at the next space from the same direction
-            if (any(coord < 0 for coord in next_beam["coord"]) or
-                next_beam["coord"][0] > len(cave_grid) - 1 or
-                next_beam["coord"][1] > len(cave_grid[0]) - 1 or
-                next_beam["dir"] in dir_grid[next_beam["coord"][0]][next_beam["coord"][1]]
-            ):
-                break
 
             beam = next_beam
 
