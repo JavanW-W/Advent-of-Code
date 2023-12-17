@@ -1239,124 +1239,160 @@ def move(input_coord: tuple, direction: str) -> tuple:
     if direction == "down":
         return (input_coord[0] + 1, input_coord[1])
 
-def find_energized_tiles(input_path: str) -> int:
+def find_energized_tiles(input_path: str, part: int = 1) -> int:
     """Given a map of splitters and mirrors, return the number of tiles containing beams."""
     with open(input_path, newline='') as file:
         cave_grid = [[i for i in line.strip()] for line in file.readlines()]
     
-    beam_grid = [[0 for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
-    dir_grid = [[set() for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
-    init_beam = {
-        "coord": (0, 0),
-        "dir": "right"
-    }
-    beams = [init_beam]
-    for beam in beams:
-        while True:
-            # break if you've hit an edge or you've already come at the next space from the same direction
-            if (any(coord < 0 for coord in beam["coord"]) or
-                beam["coord"][0] > len(cave_grid) - 1 or
-                beam["coord"][1] > len(cave_grid[0]) - 1 or
-                beam["dir"] in dir_grid[beam["coord"][0]][beam["coord"][1]]
-            ):
-                break
-            beam_grid[beam["coord"][0]][beam["coord"][1]] += 1
-            dir_grid[beam["coord"][0]][beam["coord"][1]].add(beam["dir"])
-            if cave_grid[beam["coord"][0]][beam["coord"][1]] == '.':
-                next_beam = {
-                    "coord": move(beam["coord"], beam["dir"]),
-                    "dir": beam["dir"]
-                }
-            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '\\':
-                if beam["dir"] == "right":
-                    next_beam = {
-                        "coord": move(beam["coord"], "down"),
-                        "dir": "down"
-                    }
-                elif beam["dir"] == "left":
-                    next_beam = {
-                        "coord": move(beam["coord"], "up"),
-                        "dir": "up"
-                    }
-                elif beam["dir"] == "up":
-                    next_beam = {
-                        "coord": move(beam["coord"], "left"),
-                        "dir": "left"
-                    }
-                elif beam["dir"] == "down":
-                    next_beam = {
-                        "coord": move(beam["coord"], "right"),
-                        "dir": "right"
-                    }
-            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '/':
-                if beam["dir"] == "right":
-                    next_beam = {
-                        "coord": move(beam["coord"], "up"),
-                        "dir": "up"
-                    }
-                elif beam["dir"] == "left":
-                    next_beam = {
-                        "coord": move(beam["coord"], "down"),
-                        "dir": "down"
-                    }
-                elif beam["dir"] == "up":
-                    next_beam = {
-                        "coord": move(beam["coord"], "right"),
-                        "dir": "right"
-                    }
-                elif beam["dir"] == "down":
-                    next_beam = {
-                        "coord": move(beam["coord"], "left"),
-                        "dir": "left"
-                    }
-            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '-':
-                if beam["dir"] == "right" or beam["dir"] == "left":
+    def find_max_tile(beams):
+        beam_grid = [[0 for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
+        dir_grid = [[set() for _ in range(len(cave_grid[0]))] for _ in range(len(cave_grid))]
+        for beam in beams:
+            while True:
+                # break if you've hit an edge or you've already come at the next space from the same direction
+                if (any(coord < 0 for coord in beam["coord"]) or
+                    beam["coord"][0] > len(cave_grid) - 1 or
+                    beam["coord"][1] > len(cave_grid[0]) - 1 or
+                    beam["dir"] in dir_grid[beam["coord"][0]][beam["coord"][1]]
+                ):
+                    break
+                beam_grid[beam["coord"][0]][beam["coord"][1]] += 1
+                dir_grid[beam["coord"][0]][beam["coord"][1]].add(beam["dir"])
+                if cave_grid[beam["coord"][0]][beam["coord"][1]] == '.':
                     next_beam = {
                         "coord": move(beam["coord"], beam["dir"]),
                         "dir": beam["dir"]
                     }
-                elif beam["dir"] == "up" or beam["dir"] == "down":
-                    # handle splitting
-                    # pick a direction
-                    next_beam = {
-                        "coord": move(beam["coord"], "right"),
-                        "dir": "right"
-                    }
-                    # append the other to the "beams" list
-                    beams.append({
-                        "coord": move(beam["coord"], "left"),
-                        "dir": "left"
-                    })
-            elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '|':
-                if beam["dir"] == "up" or beam["dir"] == "down":
-                    next_beam = {
-                        "coord": move(beam["coord"], beam["dir"]),
-                        "dir": beam["dir"]
-                    }
-                elif beam["dir"] == "right" or beam["dir"] == "left":
-                    # handle splitting
-                    # pick a direction
-                    next_beam = {
-                        "coord": move(beam["coord"], "up"),
-                        "dir": "up"
-                    }
-                    # append the other to the "beams" list
-                    beams.append({
-                        "coord": move(beam["coord"], "down"),
-                        "dir": "down"
-                    })
+                elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '\\':
+                    if beam["dir"] == "right":
+                        next_beam = {
+                            "coord": move(beam["coord"], "down"),
+                            "dir": "down"
+                        }
+                    elif beam["dir"] == "left":
+                        next_beam = {
+                            "coord": move(beam["coord"], "up"),
+                            "dir": "up"
+                        }
+                    elif beam["dir"] == "up":
+                        next_beam = {
+                            "coord": move(beam["coord"], "left"),
+                            "dir": "left"
+                        }
+                    elif beam["dir"] == "down":
+                        next_beam = {
+                            "coord": move(beam["coord"], "right"),
+                            "dir": "right"
+                        }
+                elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '/':
+                    if beam["dir"] == "right":
+                        next_beam = {
+                            "coord": move(beam["coord"], "up"),
+                            "dir": "up"
+                        }
+                    elif beam["dir"] == "left":
+                        next_beam = {
+                            "coord": move(beam["coord"], "down"),
+                            "dir": "down"
+                        }
+                    elif beam["dir"] == "up":
+                        next_beam = {
+                            "coord": move(beam["coord"], "right"),
+                            "dir": "right"
+                        }
+                    elif beam["dir"] == "down":
+                        next_beam = {
+                            "coord": move(beam["coord"], "left"),
+                            "dir": "left"
+                        }
+                elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '-':
+                    if beam["dir"] == "right" or beam["dir"] == "left":
+                        next_beam = {
+                            "coord": move(beam["coord"], beam["dir"]),
+                            "dir": beam["dir"]
+                        }
+                    elif beam["dir"] == "up" or beam["dir"] == "down":
+                        # handle splitting
+                        # pick a direction
+                        next_beam = {
+                            "coord": move(beam["coord"], "right"),
+                            "dir": "right"
+                        }
+                        # append the other to the "beams" list
+                        beams.append({
+                            "coord": move(beam["coord"], "left"),
+                            "dir": "left"
+                        })
+                elif cave_grid[beam["coord"][0]][beam["coord"][1]] == '|':
+                    if beam["dir"] == "up" or beam["dir"] == "down":
+                        next_beam = {
+                            "coord": move(beam["coord"], beam["dir"]),
+                            "dir": beam["dir"]
+                        }
+                    elif beam["dir"] == "right" or beam["dir"] == "left":
+                        # handle splitting
+                        # pick a direction
+                        next_beam = {
+                            "coord": move(beam["coord"], "up"),
+                            "dir": "up"
+                        }
+                        # append the other to the "beams" list
+                        beams.append({
+                            "coord": move(beam["coord"], "down"),
+                            "dir": "down"
+                        })
 
-            beam = next_beam
+                beam = next_beam
+            
+        return sum(1 for row in dir_grid for element in row if element != set())
 
-    return sum(1 for row in dir_grid for element in row if element != set())
+    if part == 2:
+        tiles = set()
+        for i in range(len(cave_grid)):
+            init_beam = {
+                "coord": (i, 0),
+                "dir": "right"
+            }
+            beams = [init_beam]
+            tiles.add(find_max_tile(beams))
+            init_beam = {
+                "coord": (i, len(cave_grid[0]) - 1),
+                "dir": "left"
+            }
+            beams = [init_beam]
+            tiles.add(find_max_tile(beams))
+        for j in range(len(cave_grid[0])):
+            init_beam = {
+                "coord": (0, j),
+                "dir": "down"
+            }
+            beams = [init_beam]
+            num_tiles = find_max_tile(beams)
+            tiles.add(num_tiles) 
+            init_beam = {
+                "coord": (len(cave_grid) - 1, j),
+                "dir": "up"
+            }
+            beams = [init_beam]
+            tiles.add(find_max_tile(beams))
+        return max(tiles)
+
+    else:
+        init_beam = {
+            "coord": (0, 0),
+            "dir": "right"
+        }
+        beams = [init_beam]
+        return find_max_tile(beams)
 
 # SOLUTIONS
 
-start_time = time.time()
-day16_part1 = find_energized_tiles('./inputs/day16.txt')
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 16 - Part 1: {day16_part1}  {exec_time}ms")
+# start_time = time.time()
+# day16_part1 = find_energized_tiles('./inputs/day16.txt')
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 16 - Part 1: {day16_part1}  {exec_time}ms")
 
-# 8171 is too low
-# 8225 is not the right answer
-# 8250 is not the right answer
+start_time = time.time()
+day16_part2 = find_energized_tiles('./inputs/day16.txt', 2)
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 16 - Part 1: {day16_part2}  {exec_time}ms")

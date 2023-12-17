@@ -101,6 +101,11 @@
     },
     "day-16": {
       "test_input": "./inputs/test/day16.txt",
-      "part1_solution": 46
+      "part1_solution": 46,
+      "part2_solution": 51
+    },
+    "day-17": {
+      "test_input": "./inputs/test/day17.txt",
+      "part1_solution": 102
     }
 }
