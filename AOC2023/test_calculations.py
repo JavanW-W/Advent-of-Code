@@ -213,6 +213,16 @@ class TestCalculations(unittest.TestCase):
         data = self.testData["day-16"]
         self.assertEqual(calculations.find_energized_tiles(data["test_input"], 2), data["part2_solution"])
 
+    def test_day19_part1(self):
+        """Day 19 Part 1 Test Case."""
+        data = self.testData["day-19"]
+        self.assertEqual(calculations.find_total_ratings(data["test_input"]), data["part1_solution"])
+
+    def test_day19_part2(self):
+        """Day 19 Part 2 Test Case."""
+        data = self.testData["day-19"]
+        self.assertEqual(calculations.find_accepted_combos(data["test_input"]), data["part2_solution"])
+
 if __name__ == '__main__':
     unittest.main()
 

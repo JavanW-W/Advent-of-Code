@@ -1392,7 +1392,100 @@ def find_energized_tiles(input_path: str, part: int = 1) -> int:
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 16 - Part 1: {day16_part1}  {exec_time}ms")
 
-start_time = time.time()
-day16_part2 = find_energized_tiles('./inputs/day16.txt', 2)
-exec_time = round(1000 * (time.time() - start_time), 4)
-print(f"Day 16 - Part 1: {day16_part2}  {exec_time}ms")
+# start_time = time.time()
+# day16_part2 = find_energized_tiles('./inputs/day16.txt', 2)
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 16 - Part 2: {day16_part2}  {exec_time}ms")
+    
+#
+# DAY 19 FUNCTIONS
+#
+    
+def find_total_ratings(input_path: str) -> int:
+    """Given a a list of workflows and part ratings, 
+    return the total rating of the accepted parts.
+    """
+
+    with open(input_path, newline='') as file:
+        file_data = file.read().split('\n\n')
+        workflow_list = file_data[0].split('\n')
+        parts_list = file_data[1].split('\n')
+
+    # make the workflows into a dictionary
+    workflows = {}
+    for workflow in workflow_list:
+        name = workflow.split('{')[0]
+        operations = workflow.split('{')[1].split('}')[0].split(',')
+        workflows[name] = operations
+
+    # make the parts into a list of dicts
+    parts = []
+    for part in parts_list:
+        part_dict = {}
+        ratings = part.replace('{','').replace('}','').split(',')
+        for rating in ratings:
+            part_dict[rating.split('=')[0]] = int(rating.split('=')[1])
+        parts.append(part_dict)
+
+    total_rating = 0
+    for part in parts:
+        # go through the workflows, starting with 'in'
+        workflow_name = 'in'
+        part_done = False
+        while part_done is False:
+            for step in workflows[workflow_name]:
+                if ":" in step:
+                    category = step.split(":")[0][0]
+                    operator = step.split(":")[0][1]
+                    value = int(step.split(":")[0][2:])
+                    result = step.split(":")[1]
+                    if operator == "<":
+                        if part[category] < value:
+                            next_step = result
+                            break
+                        else:
+                            continue
+                    elif operator == ">":
+                        if part[category] > value:
+                            next_step = result
+                            break
+                        else:
+                            continue
+                else:
+                    next_step = step
+                    break
+            if next_step == "A":
+                total_rating += part['x'] + part['m'] + part['a'] + part['s']
+                part_done = True
+            elif next_step == "R":
+                part_done = True
+            else:
+                workflow_name = next_step
+
+    return total_rating
+
+def find_accepted_combos(input_path: str) -> int:
+    """Given a list of workflows, determine the total number of distinct combinations
+    of ratings that would be accepted, if there are 4 rating categories (x, m, a, s) 
+    that each must be between 1 and 4000.
+    """
+
+    with open(input_path, newline='') as file:
+        file_data = file.read().split('\n\n')
+        workflow_list = file_data[0].split('\n')
+
+    # make the workflows into a dictionary
+    workflows = {}
+    for workflow in workflow_list:
+        name = workflow.split('{')[0]
+        operations = workflow.split('{')[1].split('}')[0].split(',')
+        workflows[name] = operations
+
+
+
+# SOLUTIONS
+
+# start_time = time.time()
+# day19_part1 = find_total_ratings('./inputs/day19.txt')
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 19 - Part 1: {day19_part1}  {exec_time}ms")

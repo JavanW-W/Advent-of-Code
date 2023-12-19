@@ -107,5 +107,10 @@
     "day-17": {
       "test_input": "./inputs/test/day17.txt",
       "part1_solution": 102
+    },
+    "day-19": {
+      "test_input": "./inputs/test/day19.txt",
+      "part1_solution": 19114,
+      "part2_solution": 167409079868000
     }
 }
