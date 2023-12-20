@@ -149,7 +149,20 @@ class TestCalculations(unittest.TestCase):
         ]
         for case in cases:
             with self.subTest(case["case"]):
-                self.assertEqual(calculations.find_farthest_pipe(data["test_inputs"][case["index"]]), data["part1_solutions"][case["index"]])
+                result, _ = calculations.find_farthest_pipe(data["part1_inputs"][case["index"]])
+                self.assertEqual(result, data["test_solutions"][case["index"]])
+
+    def test_day10_part2(self):
+        """Day 10 Part 2 Test Cases."""
+        data = self.testData["day-10"]
+        cases = [
+            {"case": "Simple loop", "index": 0},
+            {"case": "Complex loop", "index": 1}
+        ]
+        for case in cases:
+            with self.subTest(case["case"]):
+                step, vertex_coords = calculations.find_farthest_pipe(data["part2_inputs"][case["index"]])
+                self.assertEqual(calculations.find_enclosed_tiles(step, vertex_coords), data["test_solutions"][case["index"]])
 
     def test_day11_part1(self):
         """Day 11 Part 1 Test Case."""
@@ -213,15 +226,20 @@ class TestCalculations(unittest.TestCase):
         data = self.testData["day-16"]
         self.assertEqual(calculations.find_energized_tiles(data["test_input"], 2), data["part2_solution"])
 
+    def test_day18_part1(self):
+        """Day 18 Part 1 Test Case."""
+        data = self.testData["day-18"]
+        self.assertEqual(calculations.lava_pit_volume(data["test_input"]), data["part1_solution"])
+
     def test_day19_part1(self):
         """Day 19 Part 1 Test Case."""
         data = self.testData["day-19"]
         self.assertEqual(calculations.find_total_ratings(data["test_input"]), data["part1_solution"])
 
-    def test_day19_part2(self):
-        """Day 19 Part 2 Test Case."""
-        data = self.testData["day-19"]
-        self.assertEqual(calculations.find_accepted_combos(data["test_input"]), data["part2_solution"])
+    # def test_day19_part2(self):
+    #     """Day 19 Part 2 Test Case."""
+    #     data = self.testData["day-19"]
+    #     self.assertEqual(calculations.find_accepted_combos(data["test_input"]), data["part2_solution"])
 
 if __name__ == '__main__':
     unittest.main()

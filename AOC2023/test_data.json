@@ -72,8 +72,9 @@
       "part2_solution": 2
     },
     "day-10": {
-      "test_inputs": ["./inputs/test/day10-1.txt", "./inputs/test/day10-2.txt"],
-      "part1_solutions": [4, 8]
+      "part1_inputs": ["./inputs/test/day10-1.txt", "./inputs/test/day10-2.txt"],
+      "part2_inputs": ["./inputs/test/day10-3.txt", "./inputs/test/day10-4.txt"],
+      "test_solutions": [4, 8]
     },
     "day-11": {
       "test_input": "./inputs/test/day11.txt",
@@ -107,6 +108,11 @@
     "day-17": {
       "test_input": "./inputs/test/day17.txt",
       "part1_solution": 102
+    },
+    "day-18": {
+      "test_input": "./inputs/test/day18.txt",
+      "part1_solution": 62,
+      "part2_solution": 952408144115
     },
     "day-19": {
       "test_input": "./inputs/test/day19.txt",

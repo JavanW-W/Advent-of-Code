@@ -780,6 +780,7 @@ def find_farthest_pipe(input_path: str) -> int:
 
     step = 0
 
+    vertex_coords = [[starting_point], [starting_point]]
     pipe_points = [starting_point, starting_point]
     while True:
         for index, (point, direction) in enumerate(zip(pipe_points, direction_points)):
@@ -800,6 +801,8 @@ def find_farthest_pipe(input_path: str) -> int:
                 "move": directions[2],
             }
             # reassign your pipe points
+            if pipe_type in "LJF7":
+                vertex_coords[index].append(next_point)
             pipe_points[index] = next_point
             direction_points[index] = next_direction
 
@@ -808,14 +811,35 @@ def find_farthest_pipe(input_path: str) -> int:
         if pipe_points[0] == pipe_points[1]:
             break
 
-    return step
+    ordered_vertices = vertex_coords[0]
+    for i in range(-1, -len(vertex_coords[1]) - 1, -1):
+        ordered_vertices.append(vertex_coords[1][i])                
+
+    return step, ordered_vertices
+
+def find_enclosed_tiles(steps, coords: list[dict]) -> int:
+    """Given a list of coordinates, return the number of enclosed points."""
+
+    # shoelace formula
+    area = 0
+    for i in range(1, len(coords)):
+        area += 0.5 * (coords[i - 1]["row"] - coords[i]["row"]) * (coords[i - 1]["col"] + coords[i]["col"])
+
+    area = int(abs(area))
+
+    # now derive interior points from pick's theorem (steps is exterior points / 2)
+    return area + 1 - steps
 
 # SOLUTIONS
 
-# start_time = time.time()
-# day10_part1 = find_farthest_pipe('./inputs/day10.txt')
-# exec_time = round(1000 * (time.time() - start_time), 4)
-# print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")
+start_time = time.time()
+day10_part1, vertex_coords = find_farthest_pipe('./inputs/day10.txt')
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 10 - Part 1: {day10_part1}  {exec_time}ms")
+day10_part2 = find_enclosed_tiles(day10_part1, vertex_coords)
+exec_time = round(1000 * (time.time() - start_time), 4)
+print(f"Day 10 - Part 2: {day10_part2}  {exec_time}ms")
+
 
 #
 # DAY 11 FUNCTIONS
@@ -1397,6 +1421,90 @@ def find_energized_tiles(input_path: str, part: int = 1) -> int:
 # exec_time = round(1000 * (time.time() - start_time), 4)
 # print(f"Day 16 - Part 2: {day16_part2}  {exec_time}ms")
     
+#
+# DAY 18 FUNCTIONS
+#
+    
+def lava_pit_volume(input_path: str) -> int:
+    """Given directions for digging trenches, return the total
+    volume of lava a lagoon could hold in cubic meters.
+    """
+
+    with open(input_path, newline='') as file:
+        trench_data = file.readlines()
+
+    directions = []
+    perimeter = 0
+    for line in trench_data:
+        directions.append(line.split())
+        perimeter += int(line.split()[1])
+
+    # let's get these coordinates, assuming we start at (0, 0)
+    init_coord = (0, 0)
+    coords = [init_coord]
+    for direction in directions:
+        coord = coords[-1]
+        if direction[0] == "R":
+            next_coord = (coord[0], coord[1] + int(direction[1]))
+        elif direction[0] == "L":
+            next_coord = (coord[0], coord[1] - int(direction[1]))
+        elif direction[0] == "U":
+            next_coord = (coord[0] - int(direction[1]), coord[1])
+        elif direction[0] == "D":
+            next_coord = (coord[0] + int(direction[1]), coord[1])
+        coords.append(next_coord)
+    
+    # shoelace formula
+    area = 0
+    for i in range(1, len(coords)):
+        area += (coords[i - 1][0] + coords[i][0]) * (coords[i - 1][1] - coords[i][1])
+
+    return int(abs(area / 2)) + int((perimeter + 4)/2) - 1  # pick's theorem
+
+def lava_pit_but_bigger(input_path: str) -> int:
+    """Given (poorly written) directions for digging trenches, return the total
+    volume of lava a lagoon could hold in cubic meters.
+    """
+
+    with open(input_path, newline='') as file:
+        trench_data = file.readlines()
+
+    directions = []
+    perimeter = 0
+    for line in trench_data:
+        directions.append(line.split())
+        perimeter += int(line.split()[1])
+
+    # let's get these coordinates, assuming we start at (0, 0)
+    init_coord = (0, 0)
+    coords = [init_coord]
+    for direction in directions:
+        coord = coords[-1]
+        if direction[0] == "R":
+            next_coord = (coord[0], coord[1] + int(direction[1]))
+        elif direction[0] == "L":
+            next_coord = (coord[0], coord[1] - int(direction[1]))
+        elif direction[0] == "U":
+            next_coord = (coord[0] - int(direction[1]), coord[1])
+        elif direction[0] == "D":
+            next_coord = (coord[0] + int(direction[1]), coord[1])
+        coords.append(next_coord)
+    
+    # shoelace formula
+    area = 0
+    for i in range(1, len(coords)):
+        area += (coords[i - 1][0] + coords[i][0]) * (coords[i - 1][1] - coords[i][1])
+
+    return int(abs(area / 2)) + int((perimeter + 4)/2) - 1  # pick's theorem
+
+
+# SOLUTIONS
+
+# start_time = time.time()
+# day18_part1 = lava_pit_volume('./inputs/day18.txt')
+# exec_time = round(1000 * (time.time() - start_time), 4)
+# print(f"Day 18 - Part 1: {day18_part1}  {exec_time}ms")
+
 #
 # DAY 19 FUNCTIONS
 #
