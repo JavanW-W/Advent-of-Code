@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "day1": "node ./outputs/src/day1.js",
+    "day2": "node ./outputs/src/day2.js"
   },
   "keywords": [],
   "author": "",

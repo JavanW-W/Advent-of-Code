@@ -7,6 +7,7 @@ describe('testing AoC 2024 Day 1 Part 1', function () {
         expect((0, day1_1.day1_part1)('./inputs/test/day1.txt')).toBe(11);
     });
 });
+//Part 2
 var day1_2 = require("../src/day1");
 describe('testing AoC 2024 Day 1 Part 2', function () {
     test('test case should give 31', function () {

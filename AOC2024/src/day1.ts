@@ -28,6 +28,8 @@ export function day1_part1(file_path: string): number {
 
 console.log('Part 1:', day1_part1('./inputs/day1.txt'));
 
+// Part 2
+
 export function day1_part2(file_path: string): number {
     let input = fs.readFileSync(file_path, 'utf8');
     let flat_list = input.split(/\s+/);

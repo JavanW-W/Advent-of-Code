@@ -27,6 +27,7 @@ function day1_part1(file_path) {
     return total_distance;
 }
 console.log('Part 1:', day1_part1('./inputs/day1.txt'));
+// Part 2
 function day1_part2(file_path) {
     var input = fs.readFileSync(file_path, 'utf8');
     var flat_list = input.split(/\s+/);
