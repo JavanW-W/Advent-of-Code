@@ -1,3 +1,6 @@
 inputs/
 puzzle_input.txt
 __pycache__/
+helloworld.*
+*_cache
+node_modules
