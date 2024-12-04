@@ -8,6 +8,8 @@ describe('testing AoC 2024 Day 3 Part 1', () => {
   });
 });
 
+//Part 2
+
 import { day3_part2 } from '../src/day3';
 
 describe('testing AoC 2024 Day 3 Part 2', () => {

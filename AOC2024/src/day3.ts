@@ -17,7 +17,7 @@ export function day3_part1(file_path: string): number {
 
 console.log('Part 1:', day3_part1('./inputs/day3.txt'));
 
-// Part 1
+// Part 2
 export function day3_part2(file_path: string): number {
     let input = fs.readFileSync(file_path, 'utf8');
     const regex = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g;

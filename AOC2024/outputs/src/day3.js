@@ -18,7 +18,7 @@ function day3_part1(file_path) {
 }
 ;
 console.log('Part 1:', day3_part1('./inputs/day3.txt'));
-// Part 1
+// Part 2
 function day3_part2(file_path) {
     var input = fs.readFileSync(file_path, 'utf8');
     var regex = /mul\(\d+,\d+\)|do\(\)|don't\(\)/g;
