@@ -12,7 +12,8 @@
     "day2": "node ./outputs/src/day2.js",
     "day3": "node ./outputs/src/day3.js",
     "day4": "node ./outputs/src/day4.js",
-    "day5": "node ./outputs/src/day5.js"
+    "day5": "node ./outputs/src/day5.js",
+    "day6": "node ./outputs/src/day6.js"
   },
   "keywords": [],
   "author": "",
