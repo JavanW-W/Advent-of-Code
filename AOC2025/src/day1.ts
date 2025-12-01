@@ -16,10 +16,13 @@ export function day1_part1(file_path: string): number {
         }
 
         // handle wraparound
-        if (position < 0) {
-            position = 100 + position // -1 => 99
-        } else if (position > 99) {
-            position = position - 100 // 100 => 0
+        while (position < 0 || position > 99) {
+            if (position < 0) {
+                position = 100 + position; // -1 => 99
+            }
+            else if (position > 99) {
+                position = position - 100; // 100 => 0
+            }
         }
 
         // count zeroes

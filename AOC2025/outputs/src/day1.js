@@ -17,9 +17,8 @@ function day1_part1(file_path) {
         else if (dir == "L") {
             position = position - clicks;
         }
-
         // handle wraparound
-        while (position < 0 | position > 99) {
+        while (position < 0 || position > 99) {
             if (position < 0) {
                 position = 100 + position; // -1 => 99
             }
@@ -27,9 +26,7 @@ function day1_part1(file_path) {
                 position = position - 100; // 100 => 0
             }
         }
-
         // count zeroes
-        console.log(position)
         if (position == 0) {
             count += 1;
         }
@@ -37,4 +34,4 @@ function day1_part1(file_path) {
     return count;
 }
 console.log('Part 1:', day1_part1('./inputs/day1.txt'));
-// 402 is too low
+// Part 2
