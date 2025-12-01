@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "CommonJS",
+      "outDir": "outputs"
+    },
+    "include": ["src/**/day1.ts", "tests/day1.test.ts"]
+}  
