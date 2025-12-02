@@ -20,7 +20,7 @@ export function day2_part1(file_path: string): number {
         }
     })
 
-    let sum = invalid_ids.reduce(
+    let sum: number = invalid_ids.reduce(
         (accumulator, current_id) => accumulator + current_id
     )
     return sum
