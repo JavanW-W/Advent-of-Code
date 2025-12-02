@@ -4,5 +4,5 @@
       "module": "CommonJS",
       "outDir": "outputs"
     },
-    "include": ["src/**/day1.ts", "tests/day1.test.ts"]
+    "include": ["src/**/day2.ts", "tests/day2.test.ts"]
 }  
